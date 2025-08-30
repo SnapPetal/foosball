@@ -1,0 +1,37 @@
+# Application Configuration
+spring:
+  application:
+    name: foosball
+  
+  # Database Configuration
+  datasource:
+    url: jdbc:postgresql://ls-3cd9e093f05f5c4d801b58031197f04063b55800.cmldxjsfqvn4.us-east-1.rds.amazonaws.com:5432/dbmaster
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  
+  # Liquibase Configuration
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: foosball
+
+# Server Configuration
+server:
+  port: 8080
+
+# Logging
+logging:
+  level:
+    com.thonbecker.foosball: INFO
+    org.springframework.data.rest: INFO

@@ -7,8 +7,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@Profile("local")
-public class LocalDevConfig {
+@Profile("dev")
+public class DevConfig {
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {

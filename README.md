@@ -20,13 +20,10 @@ A comprehensive backend service for tracking foosball game results, player stati
 - Maven 3.6+
 - Docker & Docker Compose (for PostgreSQL)
 
-### Option 1: Local Development (H2 Database)
+### Option 1: Development (H2 Database)
 ```bash
-# Make scripts executable
-chmod +x start-local.sh
-
-# Start with local profile (H2 in-memory database)
-./start-local.sh
+# Start with dev profile (H2 in-memory database)
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 ### Option 2: PostgreSQL with Docker
@@ -46,8 +43,8 @@ docker-compose up -d postgres
 # Start Spring Boot (default profile)
 mvn spring-boot:run
 
-# Or with local profile
-mvn spring-boot:run -Dspring-boot.run.profiles=local
+# Or with dev profile
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 ## 🌐 API Endpoints
@@ -103,7 +100,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=local
 
 ### Schema Strategy
 - **Default**: Uses `foosball` schema
-- **Local**: H2 in-memory with auto-creation
+- **Dev**: H2 in-memory with auto-creation
 - **Production**: PostgreSQL with schema management
 
 ## 🔧 Configuration Profiles
@@ -113,7 +110,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=local
 - Liquibase migrations
 - Production-ready settings
 
-### Local Profile
+### Dev Profile
 - H2 in-memory database
 - H2 console enabled
 - Detailed logging
@@ -126,7 +123,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=local
 
 ## 🛠️ Development
 
-### Local Development Features
+### Development Features
 - **Hot Reloading**: Spring Boot DevTools
 - **H2 Console**: Database inspection at `/h2-console`
 - **Detailed Logging**: SQL queries, web requests, transactions
