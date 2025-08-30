@@ -19,6 +19,9 @@ spring:
       hibernate:
         format_sql: false
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: foosball
+        search:
+          default_schema: foosball
   
   # Liquibase Configuration
   liquibase:
@@ -35,3 +38,9 @@ logging:
   level:
     com.thonbecker.foosball: INFO
     org.springframework.data.rest: INFO
+
+# Schema Management
+foosball:
+  schema:
+    name: foosball
+    create-if-not-exists: true

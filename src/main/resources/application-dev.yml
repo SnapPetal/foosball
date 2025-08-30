@@ -1,11 +1,26 @@
-# Database Configuration - H2 for local development
+# Database Configuration - Docker PostgreSQL for development
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/dbmaster
-    username: dbmaster
-    password: 
+    username: dbmasteruser
+    password: ""
     driver-class-name: org.postgresql.Driver
-
+  
+  # JPA Configuration for Development
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # Use public schema for development
+        default_schema: public
+        search:
+          default_schema: foosball
+    defer-datasource-initialization: true
   
   # Development-specific settings
   devtools:
@@ -44,4 +59,9 @@ management:
   endpoint:
     health:
       show-details: always
+
+# Sample data loading
+foosball:
+  sample-data:
+    enabled: true
 

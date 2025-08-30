@@ -1,13 +1,13 @@
 # Test Profile Configuration
-# Use H2 in-memory database for testing
+# Use PostgreSQL for testing
 
 # Database Configuration
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
+    url: jdbc:postgresql://localhost:5432/dbmaster
+    username: dbmasteruser
     password: ""
-    driver-class-name: org.h2.Driver
+    driver-class-name: org.postgresql.Driver
   
   # JPA Configuration
   jpa:
@@ -17,7 +17,10 @@ spring:
     properties:
       hibernate:
         format_sql: false
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: foosball_test
+        search:
+          default_schema: foosball_test
   
   # Disable Liquibase for tests
   liquibase:
