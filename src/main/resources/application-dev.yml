@@ -1,67 +1,11 @@
-# Database Configuration - Docker PostgreSQL for development
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/dbmaster
     username: dbmasteruser
-    password: ""
-    driver-class-name: org.postgresql.Driver
+    password:
   
-  # JPA Configuration for Development
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        # Use public schema for development
-        default_schema: public
-        search:
-          default_schema: foosball
-    defer-datasource-initialization: true
-  
-  # Development-specific settings
-  devtools:
-    restart:
-      enabled: true
-    livereload:
-      enabled: true
-  
-  # Jackson configuration for development
-  jackson:
-    serialization:
-      fail-on-empty-beans: false
-    deserialization:
-      fail-on-unknown-properties: false
-
-# Server Configuration
-server:
-  port: 8080
-
-# Logging Configuration
-logging:
-  level:
-    com.thonbecker.foosball: DEBUG
-    org.springframework.data.rest: DEBUG
-    org.springframework.web: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.springframework.transaction: DEBUG
-
-# Actuator endpoints for development monitoring
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,env
-  endpoint:
-    health:
-      show-details: always
-
-# Sample data loading
-foosball:
-  sample-data:
-    enabled: true
-
+  liquibase:
+    url: jdbc:postgresql://localhost:5432/dbmaster
+    user: dbmasteruser
+    password:
+    default-schema: foosball
