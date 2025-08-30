@@ -3,10 +3,9 @@ package com.thonbecker.foosball.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "games", schema = "foosball")
@@ -74,18 +73,19 @@ public class Game {
     private String notes;
 
     public enum TeamColor {
-        WHITE, BLACK
+        WHITE,
+        BLACK
     }
 
     public enum Position {
-        GOALIE, FORWARD
+        GOALIE,
+        FORWARD
     }
 
     // Constructors
     public Game() {}
 
-    public Game(Player whiteTeamPlayer1, Player whiteTeamPlayer2, 
-                Player blackTeamPlayer1, Player blackTeamPlayer2) {
+    public Game(Player whiteTeamPlayer1, Player whiteTeamPlayer2, Player blackTeamPlayer1, Player blackTeamPlayer2) {
         this.whiteTeamPlayer1 = whiteTeamPlayer1;
         this.whiteTeamPlayer2 = whiteTeamPlayer2;
         this.blackTeamPlayer1 = blackTeamPlayer1;
@@ -99,13 +99,13 @@ public class Game {
         determineWinner();
     }
 
-    public void setPositionScores(int whiteGoalieScore, int whiteForwardScore, 
-                                 int blackGoalieScore, int blackForwardScore) {
+    public void setPositionScores(
+            int whiteGoalieScore, int whiteForwardScore, int blackGoalieScore, int blackForwardScore) {
         this.whiteTeamGoalieScore = whiteGoalieScore;
         this.whiteTeamForwardScore = whiteForwardScore;
         this.blackTeamGoalieScore = blackGoalieScore;
         this.blackTeamForwardScore = blackForwardScore;
-        
+
         // Update total scores
         this.whiteTeamScore = whiteGoalieScore + whiteForwardScore;
         this.blackTeamScore = blackGoalieScore + blackForwardScore;
@@ -162,7 +162,7 @@ public class Game {
     public Position getHighestScoringPosition() {
         int goalieTotal = getTotalGoalieScore();
         int forwardTotal = getTotalForwardScore();
-        
+
         if (goalieTotal > forwardTotal) {
             return Position.GOALIE;
         } else if (forwardTotal > goalieTotal) {
@@ -279,21 +279,20 @@ public class Game {
 
     @Override
     public String toString() {
-        return "Game{" +
-                "id=" + id +
-                ", whiteTeamPlayer1=" + (whiteTeamPlayer1 != null ? whiteTeamPlayer1.getName() : "null") +
-                ", whiteTeamPlayer2=" + (whiteTeamPlayer2 != null ? whiteTeamPlayer2.getName() : "null") +
-                ", blackTeamPlayer1=" + (blackTeamPlayer1 != null ? blackTeamPlayer1.getName() : "null") +
-                ", blackTeamPlayer2=" + (blackTeamPlayer2 != null ? blackTeamPlayer2.getName() : "null") +
-                ", whiteTeamScore=" + whiteTeamScore +
-                ", blackTeamScore=" + blackTeamScore +
-                ", whiteTeamGoalieScore=" + whiteTeamGoalieScore +
-                ", whiteTeamForwardScore=" + whiteTeamForwardScore +
-                ", blackTeamGoalieScore=" + blackTeamGoalieScore +
-                ", blackTeamForwardScore=" + blackTeamForwardScore +
-                ", winner=" + winner +
-                ", playedAt=" + playedAt +
-                ", gameDurationMinutes=" + gameDurationMinutes +
-                '}';
+        return "Game{" + "id="
+                + id + ", whiteTeamPlayer1="
+                + (whiteTeamPlayer1 != null ? whiteTeamPlayer1.getName() : "null") + ", whiteTeamPlayer2="
+                + (whiteTeamPlayer2 != null ? whiteTeamPlayer2.getName() : "null") + ", blackTeamPlayer1="
+                + (blackTeamPlayer1 != null ? blackTeamPlayer1.getName() : "null") + ", blackTeamPlayer2="
+                + (blackTeamPlayer2 != null ? blackTeamPlayer2.getName() : "null") + ", whiteTeamScore="
+                + whiteTeamScore + ", blackTeamScore="
+                + blackTeamScore + ", whiteTeamGoalieScore="
+                + whiteTeamGoalieScore + ", whiteTeamForwardScore="
+                + whiteTeamForwardScore + ", blackTeamGoalieScore="
+                + blackTeamGoalieScore + ", blackTeamForwardScore="
+                + blackTeamForwardScore + ", winner="
+                + winner + ", playedAt="
+                + playedAt + ", gameDurationMinutes="
+                + gameDurationMinutes + '}';
     }
 }

@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @EnableJpaAuditing
 @EnableJpaRepositories(basePackages = "com.thonbecker.foosball.repository")
-public class JpaConfig {
-}
+public class JpaConfig {}

@@ -7,12 +7,11 @@ import com.thonbecker.foosball.projection.PositionStats;
 import com.thonbecker.foosball.projection.TeamStats;
 import com.thonbecker.foosball.repository.GameRepository;
 import com.thonbecker.foosball.repository.PlayerRepository;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -47,19 +46,29 @@ public class FoosballService {
     }
 
     // Game management
-    public Game recordGame(Player whiteTeamPlayer1, Player whiteTeamPlayer2,
-                          Player blackTeamPlayer1, Player blackTeamPlayer2,
-                          int whiteTeamScore, int blackTeamScore) {
+    public Game recordGame(
+            Player whiteTeamPlayer1,
+            Player whiteTeamPlayer2,
+            Player blackTeamPlayer1,
+            Player blackTeamPlayer2,
+            int whiteTeamScore,
+            int blackTeamScore) {
         Game game = new Game(whiteTeamPlayer1, whiteTeamPlayer2, blackTeamPlayer1, blackTeamPlayer2);
         game.setScores(whiteTeamScore, blackTeamScore);
         return gameRepository.save(game);
     }
 
-    public Game recordGameWithPositionScores(Player whiteTeamPlayer1, Player whiteTeamPlayer2,
-                                           Player blackTeamPlayer1, Player blackTeamPlayer2,
-                                           int whiteGoalieScore, int whiteForwardScore,
-                                           int blackGoalieScore, int blackForwardScore,
-                                           Integer gameDurationMinutes, String notes) {
+    public Game recordGameWithPositionScores(
+            Player whiteTeamPlayer1,
+            Player whiteTeamPlayer2,
+            Player blackTeamPlayer1,
+            Player blackTeamPlayer2,
+            int whiteGoalieScore,
+            int whiteForwardScore,
+            int blackGoalieScore,
+            int blackForwardScore,
+            Integer gameDurationMinutes,
+            String notes) {
         Game game = new Game(whiteTeamPlayer1, whiteTeamPlayer2, blackTeamPlayer1, blackTeamPlayer2);
         game.setPositionScores(whiteGoalieScore, whiteForwardScore, blackGoalieScore, blackForwardScore);
         game.setGameDurationMinutes(gameDurationMinutes);
@@ -207,9 +216,8 @@ public class FoosballService {
         List<Game> allGames = gameRepository.findAll();
         if (allGames.isEmpty()) return 0.0;
 
-        int totalGoalieGoals = allGames.stream()
-                .mapToInt(Game::getTotalGoalieScore)
-                .sum();
+        int totalGoalieGoals =
+                allGames.stream().mapToInt(Game::getTotalGoalieScore).sum();
 
         return (double) totalGoalieGoals / allGames.size();
     }
@@ -218,9 +226,8 @@ public class FoosballService {
         List<Game> allGames = gameRepository.findAll();
         if (allGames.isEmpty()) return 0.0;
 
-        int totalForwardGoals = allGames.stream()
-                .mapToInt(Game::getTotalForwardScore)
-                .sum();
+        int totalForwardGoals =
+                allGames.stream().mapToInt(Game::getTotalForwardScore).sum();
 
         return (double) totalForwardGoals / allGames.size();
     }

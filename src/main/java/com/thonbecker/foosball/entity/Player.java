@@ -3,12 +3,11 @@ package com.thonbecker.foosball.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "players", schema = "foosball")
@@ -123,11 +122,10 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", createdAt=" + createdAt +
-                '}';
+        return "Player{" + "id="
+                + id + ", name='"
+                + name + '\'' + ", email='"
+                + email + '\'' + ", createdAt="
+                + createdAt + '}';
     }
 }

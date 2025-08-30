@@ -6,12 +6,11 @@ import com.thonbecker.foosball.projection.PlayerStats;
 import com.thonbecker.foosball.projection.PositionStats;
 import com.thonbecker.foosball.projection.TeamStats;
 import com.thonbecker.foosball.service.FoosballService;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/foosball")
@@ -58,39 +57,61 @@ public class FoosballController {
     // Game endpoints
     @PostMapping("/games")
     public ResponseEntity<Game> recordGame(@RequestBody GameRequest request) {
-        Player whiteTeamPlayer1 = foosballService.findPlayerByName(request.getWhiteTeamPlayer1()).orElse(null);
-        Player whiteTeamPlayer2 = foosballService.findPlayerByName(request.getWhiteTeamPlayer2()).orElse(null);
-        Player blackTeamPlayer1 = foosballService.findPlayerByName(request.getBlackTeamPlayer1()).orElse(null);
-        Player blackTeamPlayer2 = foosballService.findPlayerByName(request.getBlackTeamPlayer2()).orElse(null);
+        Player whiteTeamPlayer1 =
+                foosballService.findPlayerByName(request.getWhiteTeamPlayer1()).orElse(null);
+        Player whiteTeamPlayer2 =
+                foosballService.findPlayerByName(request.getWhiteTeamPlayer2()).orElse(null);
+        Player blackTeamPlayer1 =
+                foosballService.findPlayerByName(request.getBlackTeamPlayer1()).orElse(null);
+        Player blackTeamPlayer2 =
+                foosballService.findPlayerByName(request.getBlackTeamPlayer2()).orElse(null);
 
-        if (whiteTeamPlayer1 == null || whiteTeamPlayer2 == null || 
-            blackTeamPlayer1 == null || blackTeamPlayer2 == null) {
+        if (whiteTeamPlayer1 == null
+                || whiteTeamPlayer2 == null
+                || blackTeamPlayer1 == null
+                || blackTeamPlayer2 == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        Game game = foosballService.recordGame(whiteTeamPlayer1, whiteTeamPlayer2, 
-                                              blackTeamPlayer1, blackTeamPlayer2,
-                                              request.getWhiteTeamScore(), request.getBlackTeamScore());
+        Game game = foosballService.recordGame(
+                whiteTeamPlayer1,
+                whiteTeamPlayer2,
+                blackTeamPlayer1,
+                blackTeamPlayer2,
+                request.getWhiteTeamScore(),
+                request.getBlackTeamScore());
         return ResponseEntity.ok(game);
     }
 
     @PostMapping("/games/position-record")
     public ResponseEntity<Game> recordGameWithPositions(@RequestBody PositionGameRequest request) {
-        Player whiteTeamPlayer1 = foosballService.findPlayerByName(request.getWhiteTeamPlayer1()).orElse(null);
-        Player whiteTeamPlayer2 = foosballService.findPlayerByName(request.getWhiteTeamPlayer2()).orElse(null);
-        Player blackTeamPlayer1 = foosballService.findPlayerByName(request.getBlackTeamPlayer1()).orElse(null);
-        Player blackTeamPlayer2 = foosballService.findPlayerByName(request.getBlackTeamPlayer2()).orElse(null);
+        Player whiteTeamPlayer1 =
+                foosballService.findPlayerByName(request.getWhiteTeamPlayer1()).orElse(null);
+        Player whiteTeamPlayer2 =
+                foosballService.findPlayerByName(request.getWhiteTeamPlayer2()).orElse(null);
+        Player blackTeamPlayer1 =
+                foosballService.findPlayerByName(request.getBlackTeamPlayer1()).orElse(null);
+        Player blackTeamPlayer2 =
+                foosballService.findPlayerByName(request.getBlackTeamPlayer2()).orElse(null);
 
-        if (whiteTeamPlayer1 == null || whiteTeamPlayer2 == null || 
-            blackTeamPlayer1 == null || blackTeamPlayer2 == null) {
+        if (whiteTeamPlayer1 == null
+                || whiteTeamPlayer2 == null
+                || blackTeamPlayer1 == null
+                || blackTeamPlayer2 == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        Game game = foosballService.recordGameWithPositionScores(whiteTeamPlayer1, whiteTeamPlayer2,
-                                                               blackTeamPlayer1, blackTeamPlayer2,
-                                                               request.getWhiteGoalieScore(), request.getWhiteForwardScore(),
-                                                               request.getBlackGoalieScore(), request.getBlackForwardScore(),
-                                                               request.getGameDurationMinutes(), request.getNotes());
+        Game game = foosballService.recordGameWithPositionScores(
+                whiteTeamPlayer1,
+                whiteTeamPlayer2,
+                blackTeamPlayer1,
+                blackTeamPlayer2,
+                request.getWhiteGoalieScore(),
+                request.getWhiteForwardScore(),
+                request.getBlackGoalieScore(),
+                request.getBlackForwardScore(),
+                request.getGameDurationMinutes(),
+                request.getNotes());
         return ResponseEntity.ok(game);
     }
 
@@ -102,7 +123,8 @@ public class FoosballController {
 
     @GetMapping("/games/{id}")
     public ResponseEntity<Game> getGameById(@PathVariable Long id) {
-        return foosballService.getGameById(id)
+        return foosballService
+                .getGameById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -115,7 +137,8 @@ public class FoosballController {
 
     // Statistics endpoints
     @GetMapping("/stats/players/top-win-percentage")
-    public ResponseEntity<List<PlayerStats>> getTopPlayersByWinPercentage(@RequestParam(defaultValue = "5") int minGames) {
+    public ResponseEntity<List<PlayerStats>> getTopPlayersByWinPercentage(
+            @RequestParam(defaultValue = "5") int minGames) {
         List<PlayerStats> stats = foosballService.getTopPlayersByWinPercentage(minGames);
         return ResponseEntity.ok(stats);
     }
@@ -140,7 +163,8 @@ public class FoosballController {
 
     // Position-based statistics
     @GetMapping("/stats/position/top-scorers")
-    public ResponseEntity<List<PositionStats>> getTopScorersByTotalGoals(@RequestParam(defaultValue = "5") int minGames) {
+    public ResponseEntity<List<PositionStats>> getTopScorersByTotalGoals(
+            @RequestParam(defaultValue = "5") int minGames) {
         List<PositionStats> stats = foosballService.getTopScorersByTotalGoals(minGames);
         return ResponseEntity.ok(stats);
     }
@@ -186,18 +210,17 @@ public class FoosballController {
     @GetMapping("/stats/overview")
     public ResponseEntity<Map<String, Object>> getGameStatsOverview() {
         Map<String, Object> stats = Map.ofEntries(
-            Map.entry("totalGames", foosballService.getTotalGames()),
-            Map.entry("totalPlayers", foosballService.getTotalPlayers()),
-            Map.entry("gamesWithWinner", foosballService.getGamesWithWinner()),
-            Map.entry("draws", foosballService.getDraws()),
-            Map.entry("averageTotalScore", foosballService.getAverageTotalScore()),
-            Map.entry("averageGameDuration", foosballService.getAverageGameDuration()),
-            Map.entry("highestTotalScore", foosballService.getHighestTotalScore()),
-            Map.entry("lowestTotalScore", foosballService.getLowestTotalScore()),
-            Map.entry("mostScoringPosition", foosballService.getMostScoringPosition()),
-            Map.entry("averageGoalieGoalsPerGame", foosballService.getAverageGoalieGoalsPerGame()),
-            Map.entry("averageForwardGoalsPerGame", foosballService.getAverageForwardGoalsPerGame())
-        );
+                Map.entry("totalGames", foosballService.getTotalGames()),
+                Map.entry("totalPlayers", foosballService.getTotalPlayers()),
+                Map.entry("gamesWithWinner", foosballService.getGamesWithWinner()),
+                Map.entry("draws", foosballService.getDraws()),
+                Map.entry("averageTotalScore", foosballService.getAverageTotalScore()),
+                Map.entry("averageGameDuration", foosballService.getAverageGameDuration()),
+                Map.entry("highestTotalScore", foosballService.getHighestTotalScore()),
+                Map.entry("lowestTotalScore", foosballService.getLowestTotalScore()),
+                Map.entry("mostScoringPosition", foosballService.getMostScoringPosition()),
+                Map.entry("averageGoalieGoalsPerGame", foosballService.getAverageGoalieGoalsPerGame()),
+                Map.entry("averageForwardGoalsPerGame", foosballService.getAverageForwardGoalsPerGame()));
         return ResponseEntity.ok(stats);
     }
 
@@ -206,10 +229,21 @@ public class FoosballController {
         private String name;
         private String email;
 
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
     }
 
     public static class GameRequest {
@@ -220,18 +254,53 @@ public class FoosballController {
         private int whiteTeamScore;
         private int blackTeamScore;
 
-        public String getWhiteTeamPlayer1() { return whiteTeamPlayer1; }
-        public void setWhiteTeamPlayer1(String whiteTeamPlayer1) { this.whiteTeamPlayer1 = whiteTeamPlayer1; }
-        public String getWhiteTeamPlayer2() { return whiteTeamPlayer2; }
-        public void setWhiteTeamPlayer2(String whiteTeamPlayer2) { this.whiteTeamPlayer2 = whiteTeamPlayer2; }
-        public String getBlackTeamPlayer1() { return blackTeamPlayer1; }
-        public void setBlackTeamPlayer1(String blackTeamPlayer1) { this.blackTeamPlayer1 = blackTeamPlayer1; }
-        public String getBlackTeamPlayer2() { return blackTeamPlayer2; }
-        public void setBlackTeamPlayer2(String blackTeamPlayer2) { this.blackTeamPlayer2 = blackTeamPlayer2; }
-        public int getWhiteTeamScore() { return whiteTeamScore; }
-        public void setWhiteTeamScore(int whiteTeamScore) { this.whiteTeamScore = whiteTeamScore; }
-        public int getBlackTeamScore() { return blackTeamScore; }
-        public void setBlackTeamScore(int blackTeamScore) { this.blackTeamScore = blackTeamScore; }
+        public String getWhiteTeamPlayer1() {
+            return whiteTeamPlayer1;
+        }
+
+        public void setWhiteTeamPlayer1(String whiteTeamPlayer1) {
+            this.whiteTeamPlayer1 = whiteTeamPlayer1;
+        }
+
+        public String getWhiteTeamPlayer2() {
+            return whiteTeamPlayer2;
+        }
+
+        public void setWhiteTeamPlayer2(String whiteTeamPlayer2) {
+            this.whiteTeamPlayer2 = whiteTeamPlayer2;
+        }
+
+        public String getBlackTeamPlayer1() {
+            return blackTeamPlayer1;
+        }
+
+        public void setBlackTeamPlayer1(String blackTeamPlayer1) {
+            this.blackTeamPlayer1 = blackTeamPlayer1;
+        }
+
+        public String getBlackTeamPlayer2() {
+            return blackTeamPlayer2;
+        }
+
+        public void setBlackTeamPlayer2(String blackTeamPlayer2) {
+            this.blackTeamPlayer2 = blackTeamPlayer2;
+        }
+
+        public int getWhiteTeamScore() {
+            return whiteTeamScore;
+        }
+
+        public void setWhiteTeamScore(int whiteTeamScore) {
+            this.whiteTeamScore = whiteTeamScore;
+        }
+
+        public int getBlackTeamScore() {
+            return blackTeamScore;
+        }
+
+        public void setBlackTeamScore(int blackTeamScore) {
+            this.blackTeamScore = blackTeamScore;
+        }
     }
 
     public static class PositionGameRequest {
@@ -246,25 +315,84 @@ public class FoosballController {
         private Integer gameDurationMinutes;
         private String notes;
 
-        public String getWhiteTeamPlayer1() { return whiteTeamPlayer1; }
-        public void setWhiteTeamPlayer1(String whiteTeamPlayer1) { this.whiteTeamPlayer1 = whiteTeamPlayer1; }
-        public String getWhiteTeamPlayer2() { return whiteTeamPlayer2; }
-        public void setWhiteTeamPlayer2(String whiteTeamPlayer2) { this.whiteTeamPlayer2 = whiteTeamPlayer2; }
-        public String getBlackTeamPlayer1() { return blackTeamPlayer1; }
-        public void setBlackTeamPlayer1(String blackTeamPlayer1) { this.blackTeamPlayer1 = blackTeamPlayer1; }
-        public String getBlackTeamPlayer2() { return blackTeamPlayer2; }
-        public void setBlackTeamPlayer2(String blackTeamPlayer2) { this.blackTeamPlayer2 = blackTeamPlayer2; }
-        public int getWhiteGoalieScore() { return whiteGoalieScore; }
-        public void setWhiteGoalieScore(int whiteGoalieScore) { this.whiteGoalieScore = whiteGoalieScore; }
-        public int getWhiteForwardScore() { return whiteForwardScore; }
-        public void setWhiteForwardScore(int whiteForwardScore) { this.whiteForwardScore = whiteForwardScore; }
-        public int getBlackGoalieScore() { return blackGoalieScore; }
-        public void setBlackGoalieScore(int blackGoalieScore) { this.blackGoalieScore = blackGoalieScore; }
-        public int getBlackForwardScore() { return blackForwardScore; }
-        public void setBlackForwardScore(int blackForwardScore) { this.blackForwardScore = blackForwardScore; }
-        public Integer getGameDurationMinutes() { return gameDurationMinutes; }
-        public void setGameDurationMinutes(Integer gameDurationMinutes) { this.gameDurationMinutes = gameDurationMinutes; }
-        public String getNotes() { return notes; }
-        public void setNotes(String notes) { this.notes = notes; }
+        public String getWhiteTeamPlayer1() {
+            return whiteTeamPlayer1;
+        }
+
+        public void setWhiteTeamPlayer1(String whiteTeamPlayer1) {
+            this.whiteTeamPlayer1 = whiteTeamPlayer1;
+        }
+
+        public String getWhiteTeamPlayer2() {
+            return whiteTeamPlayer2;
+        }
+
+        public void setWhiteTeamPlayer2(String whiteTeamPlayer2) {
+            this.whiteTeamPlayer2 = whiteTeamPlayer2;
+        }
+
+        public String getBlackTeamPlayer1() {
+            return blackTeamPlayer1;
+        }
+
+        public void setBlackTeamPlayer1(String blackTeamPlayer1) {
+            this.blackTeamPlayer1 = blackTeamPlayer1;
+        }
+
+        public String getBlackTeamPlayer2() {
+            return blackTeamPlayer2;
+        }
+
+        public void setBlackTeamPlayer2(String blackTeamPlayer2) {
+            this.blackTeamPlayer2 = blackTeamPlayer2;
+        }
+
+        public int getWhiteGoalieScore() {
+            return whiteGoalieScore;
+        }
+
+        public void setWhiteGoalieScore(int whiteGoalieScore) {
+            this.whiteGoalieScore = whiteGoalieScore;
+        }
+
+        public int getWhiteForwardScore() {
+            return whiteForwardScore;
+        }
+
+        public void setWhiteForwardScore(int whiteForwardScore) {
+            this.whiteForwardScore = whiteForwardScore;
+        }
+
+        public int getBlackGoalieScore() {
+            return blackGoalieScore;
+        }
+
+        public void setBlackGoalieScore(int blackGoalieScore) {
+            this.blackGoalieScore = blackGoalieScore;
+        }
+
+        public int getBlackForwardScore() {
+            return blackForwardScore;
+        }
+
+        public void setBlackForwardScore(int blackForwardScore) {
+            this.blackForwardScore = blackForwardScore;
+        }
+
+        public Integer getGameDurationMinutes() {
+            return gameDurationMinutes;
+        }
+
+        public void setGameDurationMinutes(Integer gameDurationMinutes) {
+            this.gameDurationMinutes = gameDurationMinutes;
+        }
+
+        public String getNotes() {
+            return notes;
+        }
+
+        public void setNotes(String notes) {
+            this.notes = notes;
+        }
     }
 }

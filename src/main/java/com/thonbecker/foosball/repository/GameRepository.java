@@ -2,69 +2,67 @@ package com.thonbecker.foosball.repository;
 
 import com.thonbecker.foosball.entity.Game;
 import com.thonbecker.foosball.entity.Player;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-@RepositoryRestResource(
-    path = "games",
-    collectionResourceRel = "games",
-    itemResourceRel = "game"
-)
+@RepositoryRestResource(path = "games", collectionResourceRel = "games", itemResourceRel = "game")
 public interface GameRepository extends JpaRepository<Game, Long> {
 
     @RestResource(path = "by-player", rel = "by-player")
-    @Query("SELECT g FROM Game g WHERE g.whiteTeamPlayer1 = :player OR g.whiteTeamPlayer2 = :player OR g.blackTeamPlayer1 = :player OR g.blackTeamPlayer2 = :player ORDER BY g.playedAt DESC")
+    @Query(
+            "SELECT g FROM Game g WHERE g.whiteTeamPlayer1 = :player OR g.whiteTeamPlayer2 = :player OR g.blackTeamPlayer1 = :player OR g.blackTeamPlayer2 = :player ORDER BY g.playedAt DESC")
     List<Game> findByPlayer(@Param("player") Player player);
-    
+
     @RestResource(path = "by-winner", rel = "by-winner")
     List<Game> findByWinner(Game.TeamColor winner);
-    
+
     @RestResource(path = "by-date-range", rel = "by-date-range")
     @Query("SELECT g FROM Game g WHERE g.playedAt BETWEEN :startDate AND :endDate ORDER BY g.playedAt DESC")
     List<Game> findByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
-    
+
     @RestResource(path = "recent", rel = "recent")
     @Query("SELECT g FROM Game g ORDER BY g.playedAt DESC")
     List<Game> findRecentGames();
-    
+
     @RestResource(path = "by-score", rel = "by-score")
     @Query("SELECT g FROM Game g WHERE g.whiteTeamScore = :score OR g.blackTeamScore = :score ORDER BY g.playedAt DESC")
     List<Game> findByScore(@Param("score") Integer score);
-    
+
     @RestResource(path = "high-scoring", rel = "high-scoring")
-    @Query("SELECT g FROM Game g WHERE g.whiteTeamScore + g.blackTeamScore >= :minTotalScore ORDER BY (g.whiteTeamScore + g.blackTeamScore) DESC")
+    @Query(
+            "SELECT g FROM Game g WHERE g.whiteTeamScore + g.blackTeamScore >= :minTotalScore ORDER BY (g.whiteTeamScore + g.blackTeamScore) DESC")
     List<Game> findHighScoringGames(@Param("minTotalScore") Integer minTotalScore);
-    
+
     @RestResource(path = "by-duration", rel = "by-duration")
     @Query("SELECT g FROM Game g WHERE g.gameDurationMinutes >= :minDuration ORDER BY g.gameDurationMinutes DESC")
     List<Game> findByMinimumDuration(@Param("minDuration") Integer minDuration);
-    
+
     @RestResource(path = "by-position-performance", rel = "by-position-performance")
-    @Query("SELECT g FROM Game g WHERE g.whiteTeamGoalieScore + g.whiteTeamForwardScore + g.blackTeamGoalieScore + g.blackTeamForwardScore >= :minPositionScore ORDER BY g.playedAt DESC")
+    @Query(
+            "SELECT g FROM Game g WHERE g.whiteTeamGoalieScore + g.whiteTeamForwardScore + g.blackTeamGoalieScore + g.blackTeamForwardScore >= :minPositionScore ORDER BY g.playedAt DESC")
     List<Game> findByPositionScore(@Param("minPositionScore") Integer minPositionScore);
-    
+
     // Statistics queries
     @Query("SELECT COUNT(g) FROM Game g WHERE g.winner IS NOT NULL")
     Long countGamesWithWinner();
-    
+
     @Query("SELECT COUNT(g) FROM Game g WHERE g.winner IS NULL")
     Long countDraws();
-    
+
     @Query("SELECT AVG(g.whiteTeamScore + g.blackTeamScore) FROM Game g")
     Double getAverageTotalScore();
-    
+
     @Query("SELECT AVG(g.gameDurationMinutes) FROM Game g WHERE g.gameDurationMinutes IS NOT NULL")
     Double getAverageGameDuration();
-    
+
     @Query("SELECT MAX(g.whiteTeamScore + g.blackTeamScore) FROM Game g")
     Integer getHighestTotalScore();
-    
+
     @Query("SELECT MIN(g.whiteTeamScore + g.blackTeamScore) FROM Game g")
     Integer getLowestTotalScore();
 }
