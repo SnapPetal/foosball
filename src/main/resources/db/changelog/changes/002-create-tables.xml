@@ -75,7 +75,7 @@
         </createTable>
 
         <!-- Player stats view -->
-        <sql>
+        <sql><![CDATA[
             CREATE OR REPLACE VIEW foosball.player_stats AS
             SELECT 
                 p.id,
@@ -83,16 +83,16 @@
                 COUNT(DISTINCT g.id) as total_games,
                 COUNT(CASE WHEN g.winner = 'WHITE' AND (g.white_team_player1_id = p.id OR g.white_team_player2_id = p.id) THEN 1 END) +
                 COUNT(CASE WHEN g.winner = 'BLACK' AND (g.black_team_player1_id = p.id OR g.black_team_player2_id = p.id) THEN 1 END) as wins,
-                COUNT(CASE WHEN g.winner = 'WHITE' AND (g.white_team_player1_id = p.id OR g.white_team_player2_id = p.id) THEN 1 END) +
-                COUNT(CASE WHEN g.winner = 'BLACK' AND (g.black_team_player1_id = p.id OR g.black_team_player2_id = p.id) THEN 1 END) * 100.0 / 
+                (COUNT(CASE WHEN g.winner = 'WHITE' AND (g.white_team_player1_id = p.id OR g.white_team_player2_id = p.id) THEN 1 END) +
+                 COUNT(CASE WHEN g.winner = 'BLACK' AND (g.black_team_player1_id = p.id OR g.black_team_player2_id = p.id) THEN 1 END)) * 100.0 / 
                 NULLIF(COUNT(DISTINCT g.id), 0) as win_percentage
             FROM foosball.players p
             LEFT JOIN foosball.games g ON p.id IN (g.white_team_player1_id, g.white_team_player2_id, g.black_team_player1_id, g.black_team_player2_id)
             GROUP BY p.id, p.name;
-        </sql>
+        ]]></sql>
 
         <!-- Position-based stats view -->
-        <sql>
+        <sql><![CDATA[
             CREATE OR REPLACE VIEW foosball.position_stats AS
             SELECT 
                 p.id,
@@ -112,10 +112,10 @@
             FROM foosball.players p
             LEFT JOIN foosball.games g ON p.id IN (g.white_team_player1_id, g.white_team_player2_id, g.black_team_player1_id, g.black_team_player2_id)
             GROUP BY p.id, p.name;
-        </sql>
+        ]]></sql>
 
         <!-- Team performance view -->
-        <sql>
+        <sql><![CDATA[
             CREATE OR REPLACE VIEW foosball.team_stats AS
             SELECT 
                 p1.id as player1_id,
@@ -127,10 +127,11 @@
                 COUNT(CASE WHEN g.winner = 'BLACK' AND (g.black_team_player1_id = p1.id AND g.black_team_player2_id = p2.id) THEN 1 END) +
                 COUNT(CASE WHEN g.winner = 'WHITE' AND (g.white_team_player1_id = p2.id AND g.white_team_player2_id = p1.id) THEN 1 END) +
                 COUNT(CASE WHEN g.winner = 'BLACK' AND (g.black_team_player1_id = p2.id AND g.black_team_player2_id = p1.id) THEN 1 END) as wins_together,
-                AVG(CASE WHEN g.white_team_player1_id = p1.id AND g.white_team_player2_id = p2.id THEN g.white_team_score ELSE 0 END) +
-                AVG(CASE WHEN g.black_team_player1_id = p1.id AND g.black_team_player2_id = p2.id THEN g.black_team_score ELSE 0 END) +
-                AVG(CASE WHEN g.white_team_player1_id = p2.id AND g.white_team_player2_id = p1.id THEN g.white_team_score ELSE 0 END) +
-                AVG(CASE WHEN g.black_team_player1_id = p2.id AND g.black_team_player2_id = p1.id THEN g.black_team_score ELSE 0 END) as avg_team_score
+                SUM(CASE WHEN g.white_team_player1_id = p1.id AND g.white_team_player2_id = p2.id THEN g.white_team_score 
+                         WHEN g.black_team_player1_id = p1.id AND g.black_team_player2_id = p2.id THEN g.black_team_score
+                         WHEN g.white_team_player1_id = p2.id AND g.white_team_player2_id = p1.id THEN g.white_team_score
+                         WHEN g.black_team_player1_id = p2.id AND g.black_team_player2_id = p1.id THEN g.black_team_score
+                         ELSE 0 END) / NULLIF(COUNT(DISTINCT g.id), 0) as avg_team_score
             FROM foosball.players p1
             CROSS JOIN foosball.players p2
             LEFT JOIN foosball.games g ON (g.white_team_player1_id = p1.id AND g.white_team_player2_id = p2.id) 
@@ -140,7 +141,7 @@
             WHERE p1.id < p2.id
             GROUP BY p1.id, p1.name, p2.id, p2.name
             HAVING COUNT(DISTINCT g.id) > 0;
-        </sql>
+        ]]></sql>
 
         <!-- Indexes for better performance -->
         <createIndex tableName="games" indexName="idx_games_players" schemaName="foosball">

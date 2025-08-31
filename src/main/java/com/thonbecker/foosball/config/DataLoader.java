@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 // @Profile("dev")  // Temporarily disabled to get service running
 public class DataLoader {
@@ -23,6 +25,22 @@ public class DataLoader {
         this.foosballService = foosballService;
     }
 
+    /**
+     * Helper method to get an existing player or create a new one
+     */
+    private Player getOrCreatePlayer(String name, String email) {
+        // First try to find existing player
+        Optional<Player> existingPlayer = foosballService.findPlayerByName(name);
+        if (existingPlayer.isPresent()) {
+            System.out.println("Player " + name + " already exists, using existing player.");
+            return existingPlayer.get();
+        }
+        
+        // If player doesn't exist, create new one
+        System.out.println("Creating new player: " + name);
+        return foosballService.createPlayer(name, email);
+    }
+
     @EventListener(ApplicationReadyEvent.class)
     public void run(ApplicationReadyEvent event) throws Exception {
         if (!sampleDataEnabled) {
@@ -32,15 +50,21 @@ public class DataLoader {
         System.out.println("Loading sample foosball data...");
 
         // Create sample players
-        Player alice = foosballService.createPlayer("Alice", "alice@example.com");
-        Player bob = foosballService.createPlayer("Bob", "bob@example.com");
-        Player charlie = foosballService.createPlayer("Charlie", "charlie@example.com");
-        Player diana = foosballService.createPlayer("Diana", "diana@example.com");
-        Player eve = foosballService.createPlayer("Eve", "eve@example.com");
-        Player frank = foosballService.createPlayer("Frank", "frank@example.com");
+        Player alice = getOrCreatePlayer("Alice", "alice@example.com");
+        Player bob = getOrCreatePlayer("Bob", "bob@example.com");
+        Player charlie = getOrCreatePlayer("Charlie", "charlie@example.com");
+        Player diana = getOrCreatePlayer("Diana", "diana@example.com");
+        Player eve = getOrCreatePlayer("Eve", "eve@example.com");
+        Player frank = getOrCreatePlayer("Frank", "frank@example.com");
 
         System.out.println("Created players: " + alice.getName() + ", " + bob.getName() + ", " + charlie.getName()
                 + ", " + diana.getName() + ", " + eve.getName() + ", " + frank.getName());
+
+        // Check if we already have games to avoid duplicates
+        if (foosballService.getTotalGames() > 0) {
+            System.out.println("Sample games already exist, skipping game creation.");
+            return;
+        }
 
         // Record some sample games with position-based scoring
         foosballService.recordGameWithPositionScores(
