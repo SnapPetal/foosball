@@ -1,6 +1,6 @@
-# 🏓 Foosball Backend Service
+# ⚽ Foosball Backend Service
 
-A comprehensive backend service for tracking foosball game results, player statistics, and team performance. Built with Spring Boot, Spring Data JPA, and Spring Data REST.
+A comprehensive backend service for tracking foosball (table soccer) game results, player statistics, and team performance. Built with Spring Boot, Spring Data JPA, and Spring Data REST.
 
 ## ✨ Features
 
@@ -48,6 +48,10 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 ## 🌐 API Endpoints
+
+### Local Development
+- **Base URL**: `http://localhost:8080`
+- **Health Check**: `http://localhost:8080/actuator/health`
 
 ### Core Endpoints
 - **Players**: `/api/players` - Player management
@@ -205,4 +209,4 @@ For questions and support:
 
 ---
 
-**Happy Foosballing! 🏓⚽**
+**Happy Foosballing! ⚽🏆**
