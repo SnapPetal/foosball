@@ -33,9 +33,36 @@ spring:
 # Server Configuration
 server:
   port: 8080
+  servlet:
+    context-path: /
+  forward-headers-strategy: native
 
-# Logging
+# Logging Configuration
 logging:
   level:
-    com.thonbecker.foosball: INFO
-    org.springframework.data.rest: INFO
+    org.springframework.jdbc: DEBUG
+    org.liquibase: DEBUG
+    com.zaxxer.hikari: DEBUG
+    org.postgresql: DEBUG
+    com.thonbecker.foosball: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Monitoring/Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    default-timeout: 180s  # 3 minutes
+    db:
+      timeout: 60s  # 1 minute for database health
+    diskspace:
+      timeout: 30s
+    redis:
+      timeout: 30s
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: always
