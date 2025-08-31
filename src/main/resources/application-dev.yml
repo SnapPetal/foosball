@@ -9,3 +9,4 @@ spring:
     user: dbmasteruser
     password:
     default-schema: foosball
+    
