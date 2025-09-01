@@ -1,5 +1,6 @@
 package com.thonbecker.foosball.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -19,21 +20,25 @@ public class Game {
     @NotNull(message = "White team player 1 is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "white_team_player1_id", nullable = false)
+    @JsonBackReference
     private Player whiteTeamPlayer1;
 
     @NotNull(message = "White team player 2 is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "white_team_player2_id", nullable = false)
+    @JsonBackReference
     private Player whiteTeamPlayer2;
 
     @NotNull(message = "Black team player 1 is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "black_team_player1_id", nullable = false)
+    @JsonBackReference
     private Player blackTeamPlayer1;
 
     @NotNull(message = "Black team player 2 is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "black_team_player2_id", nullable = false)
+    @JsonBackReference
     private Player blackTeamPlayer2;
 
     @Min(value = 0, message = "White team score cannot be negative")

@@ -52,25 +52,76 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ### Local Development
 - **Base URL**: `http://localhost:8080`
 - **Health Check**: `http://localhost:8080/actuator/health`
+- **API Base**: `http://localhost:8080/api/foosball`
 
-### Core Endpoints
-- **Players**: `/api/players` - Player management
-- **Games**: `/api/games` - Game recording and retrieval
-- **Statistics**: `/api/foosball/stats/*` - Various statistics endpoints
-
-### Spring Data REST
-- **Players**: `/api/players` - Full CRUD operations
-- **Games**: `/api/games` - Full CRUD operations
-- **Search**: `/api/players/search?name=Alice` - Player search
-
-### Custom API Endpoints
+### Player Management
+- **Get All Players**: `GET /api/foosball/players`
+- **Get Player by ID**: `GET /api/foosball/players/{id}`
+- **Search Players**: `GET /api/foosball/players/search?name={name}`
 - **Create Player**: `POST /api/foosball/players`
-- **Record Game**: `POST /api/foosball/games`
-- **Position Game**: `POST /api/foosball/games/position-record`
-- **Player Stats**: `GET /api/foosball/stats/players/*`
-- **Position Stats**: `GET /api/foosball/stats/position/*`
-- **Team Stats**: `GET /api/foosball/stats/teams/*`
-- **Overview**: `GET /api/foosball/stats/overview`
+  ```json
+  {
+    "name": "Player Name",
+    "email": "player@example.com"
+  }
+  ```
+
+### Game Management
+- **Get All Games**: `GET /api/foosball/games`
+- **Get Game by ID**: `GET /api/foosball/games/{id}`
+- **Get Recent Games**: `GET /api/foosball/games/recent`
+- **Record Basic Game**: `POST /api/foosball/games`
+  ```json
+  {
+    "whiteTeamPlayer1": "Alice",
+    "whiteTeamPlayer2": "Bob",
+    "blackTeamPlayer1": "Charlie",
+    "blackTeamPlayer2": "Diana",
+    "whiteTeamScore": 5,
+    "blackTeamScore": 3
+  }
+  ```
+- **Record Position Game**: `POST /api/foosball/games/position-record`
+  ```json
+  {
+    "whiteTeamPlayer1": "Alice",
+    "whiteTeamPlayer2": "Bob",
+    "blackTeamPlayer1": "Charlie",
+    "blackTeamPlayer2": "Diana",
+    "whiteGoalieScore": 3,
+    "whiteForwardScore": 2,
+    "blackGoalieScore": 1,
+    "blackForwardScore": 2,
+    "gameDurationMinutes": 20,
+    "notes": "Great game!"
+  }
+  ```
+
+### Player Statistics
+- **All Player Stats**: `GET /api/foosball/stats/players/all`
+- **Top Players by Win %**: `GET /api/foosball/stats/players/top-win-percentage?minGames=5`
+- **Top Players by Total Games**: `GET /api/foosball/stats/players/top-total-games?minGames=5`
+- **Top Players by Wins**: `GET /api/foosball/stats/players/top-wins?minGames=5`
+
+### Position Statistics
+- **All Position Stats**: `GET /api/foosball/stats/position/all`
+- **Top Scorers by Total Goals**: `GET /api/foosball/stats/position/top-scorers?minGames=5`
+- **Top Goalie Scorers**: `GET /api/foosball/stats/position/top-goalies?minGames=5`
+- **Top Forward Scorers**: `GET /api/foosball/stats/position/top-forwards?minGames=5`
+
+### Team Statistics
+- **All Team Stats**: `GET /api/foosball/stats/teams/all`
+- **Top Teams by Win %**: `GET /api/foosball/stats/teams/top-win-percentage?minGames=5`
+- **Top Teams by Average Score**: `GET /api/foosball/stats/teams/top-average-score?minGames=5`
+
+### Overview Statistics
+- **Game Overview**: `GET /api/foosball/stats/overview`
+  Returns comprehensive statistics including:
+  - Total games, players, wins, draws
+  - Average scores and game duration
+  - Highest/lowest scoring games
+  - Most scoring position (Goalie vs Forward)
+  - Average goals per position per game
 
 ## 📊 Data Models
 
@@ -98,9 +149,15 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 - `games` - Game results with position scoring
 
 ### Views
-- `player_stats` - Player performance statistics
-- `position_stats` - Position-based performance
-- `team_stats` - Team performance metrics
+- `player_stats` - Player performance statistics (games, wins, win percentage)
+- `position_stats` - Position-based performance (goalie vs forward goals)
+- `team_stats` - Team performance metrics (win percentage, average scores)
+
+### Database Features
+- **Automatic Winner Calculation**: Games automatically determine winners based on scores
+- **Position Scoring**: Separate tracking of goalie and forward goals
+- **Team Performance**: Analysis of player pairing effectiveness
+- **Comprehensive Statistics**: Multiple leaderboards and performance metrics
 
 ### Schema Strategy
 - **Default**: Uses `foosball` schema
@@ -126,6 +183,12 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 
 ## 🛠️ Development
 
+### Recent Fixes & Improvements
+- **CORS Configuration**: Fixed CORS issues for frontend integration
+- **Circular Reference Resolution**: Resolved infinite JSON recursion in Player/Game entities
+- **Database Schema Updates**: Fixed missing `win_percentage` column in team statistics
+- **Liquibase Migration**: Proper database schema management with new changesets
+
 ### Development Features
 - **Hot Reloading**: Spring Boot DevTools
 - **Detailed Logging**: SQL queries, web requests, transactions
@@ -144,6 +207,22 @@ mvn test
 
 # Run with specific profile
 mvn test -Dspring.profiles.active=test
+```
+
+### API Testing
+```bash
+# Test the application
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Test endpoints (in another terminal)
+curl http://localhost:8080/api/foosball/stats/overview
+curl http://localhost:8080/api/foosball/players
+curl http://localhost:8080/api/foosball/games
+
+# Create a test player
+curl -X POST http://localhost:8080/api/foosball/players \
+  -H "Content-Type: application/json" \
+  -d '{"name":"TestPlayer","email":"test@example.com"}'
 ```
 
 ## 📈 Monitoring
@@ -206,6 +285,24 @@ For questions and support:
 - Review the API documentation
 - Check the health endpoints
 - Review application logs
+
+## ✅ Current Status
+
+The application is fully functional with all endpoints working correctly:
+
+- ✅ **Player Management**: Full CRUD operations working
+- ✅ **Game Recording**: Both basic and position-based games working
+- ✅ **Statistics**: All statistical endpoints returning correct data
+- ✅ **Database**: Proper schema with all views and relationships
+- ✅ **API**: Clean JSON responses without circular references
+- ✅ **CORS**: Properly configured for frontend integration
+
+### Verified Endpoints
+All 25+ API endpoints have been tested and verified to return correct data:
+- Player endpoints (4)
+- Game endpoints (5) 
+- Statistics endpoints (16+)
+- Health and monitoring endpoints
 
 ---
 

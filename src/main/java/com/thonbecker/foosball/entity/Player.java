@@ -1,5 +1,6 @@
 package com.thonbecker.foosball.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -32,15 +33,19 @@ public class Player {
 
     // Relationships
     @OneToMany(mappedBy = "whiteTeamPlayer1", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Game> whiteTeamPlayer1Games = new ArrayList<>();
 
     @OneToMany(mappedBy = "whiteTeamPlayer2", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Game> whiteTeamPlayer2Games = new ArrayList<>();
 
     @OneToMany(mappedBy = "blackTeamPlayer1", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Game> blackTeamPlayer1Games = new ArrayList<>();
 
     @OneToMany(mappedBy = "blackTeamPlayer2", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Game> blackTeamPlayer2Games = new ArrayList<>();
 
     // Constructors
