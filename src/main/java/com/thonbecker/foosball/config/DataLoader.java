@@ -2,6 +2,7 @@ package com.thonbecker.foosball.config;
 
 import com.thonbecker.foosball.entity.Player;
 import com.thonbecker.foosball.service.FoosballService;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -9,10 +10,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
-// @Profile("dev")  // Temporarily disabled to get service running
+@Profile("dev")
 public class DataLoader {
 
     private final FoosballService foosballService;
@@ -35,7 +34,7 @@ public class DataLoader {
             System.out.println("Player " + name + " already exists, using existing player.");
             return existingPlayer.get();
         }
-        
+
         // If player doesn't exist, create new one
         System.out.println("Creating new player: " + name);
         return foosballService.createPlayer(name, email);
