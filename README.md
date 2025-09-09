@@ -261,7 +261,6 @@ This project is licensed under the MIT License.
 ## 🆘 Support
 
 For questions and support:
-- Check the [DEVELOPMENT.md](DEVELOPMENT.md) guide
 - Review the API documentation
 - Check the health endpoints
 - Review application logs
