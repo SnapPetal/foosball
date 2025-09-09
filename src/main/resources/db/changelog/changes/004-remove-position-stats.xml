@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="004-remove-position-stats" author="foosball-app">
+
+        <!-- Drop the position_stats view -->
+        <dropView viewName="position_stats" schemaName="foosball"/>
+
+        <!-- Drop the index on position scores -->
+        <dropIndex indexName="idx_games_position_scores" tableName="games" schemaName="foosball"/>
+
+        <!-- Drop position-related columns from the games table -->
+        <dropColumn tableName="games" schemaName="foosball" columnName="white_team_goalie_score"/>
+        <dropColumn tableName="games" schemaName="foosball" columnName="white_team_forward_score"/>
+        <dropColumn tableName="games" schemaName="foosball" columnName="black_team_goalie_score"/>
+        <dropColumn tableName="games" schemaName="foosball" columnName="black_team_forward_score"/>
+
+    </changeSet>
+
+</databaseChangeLog>

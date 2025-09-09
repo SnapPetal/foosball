@@ -3,7 +3,6 @@ package com.thonbecker.foosball.service;
 import com.thonbecker.foosball.entity.Game;
 import com.thonbecker.foosball.entity.Player;
 import com.thonbecker.foosball.projection.PlayerStats;
-import com.thonbecker.foosball.projection.PositionStats;
 import com.thonbecker.foosball.projection.TeamStats;
 import com.thonbecker.foosball.repository.GameRepository;
 import com.thonbecker.foosball.repository.PlayerRepository;
@@ -58,24 +57,6 @@ public class FoosballService {
         return gameRepository.save(game);
     }
 
-    public Game recordGameWithPositionScores(
-            Player whiteTeamPlayer1,
-            Player whiteTeamPlayer2,
-            Player blackTeamPlayer1,
-            Player blackTeamPlayer2,
-            int whiteGoalieScore,
-            int whiteForwardScore,
-            int blackGoalieScore,
-            int blackForwardScore,
-            Integer gameDurationMinutes,
-            String notes) {
-        Game game = new Game(whiteTeamPlayer1, whiteTeamPlayer2, blackTeamPlayer1, blackTeamPlayer2);
-        game.setPositionScores(whiteGoalieScore, whiteForwardScore, blackGoalieScore, blackForwardScore);
-        game.setGameDurationMinutes(gameDurationMinutes);
-        game.setNotes(notes);
-        return gameRepository.save(game);
-    }
-
     public List<Game> getAllGames() {
         return gameRepository.findAll();
     }
@@ -117,31 +98,6 @@ public class FoosballService {
         return playerRepository.findAllPlayerStatsOrderedByWins();
     }
 
-    // Position-based statistics
-    public List<PositionStats> getTopScorersByTotalGoals(int minGames) {
-        return playerRepository.findTopScorersByTotalGoals(minGames);
-    }
-
-    public List<PositionStats> getTopGoalieScorers(int minGames) {
-        return playerRepository.findTopGoalieScorers(minGames);
-    }
-
-    public List<PositionStats> getTopForwardScorers(int minGames) {
-        return playerRepository.findTopForwardScorers(minGames);
-    }
-
-    public List<PositionStats> getAllPositionStatsOrderedByTotalGoals() {
-        return playerRepository.findAllPositionStatsOrderedByTotalGoals();
-    }
-
-    public List<PositionStats> getAllPositionStatsOrderedByGoalieGoals() {
-        return playerRepository.findAllPositionStatsOrderedByGoalieGoals();
-    }
-
-    public List<PositionStats> getAllPositionStatsOrderedByForwardGoals() {
-        return playerRepository.findAllPositionStatsOrderedByForwardGoals();
-    }
-
     // Team performance statistics
     public List<TeamStats> getTopTeamsByWinPercentage(int minGames) {
         return playerRepository.findTopTeamsByWinPercentage(minGames);
@@ -180,55 +136,11 @@ public class FoosballService {
         return gameRepository.getAverageTotalScore();
     }
 
-    public Double getAverageGameDuration() {
-        return gameRepository.getAverageGameDuration();
-    }
-
     public Integer getHighestTotalScore() {
         return gameRepository.getHighestTotalScore();
     }
 
     public Integer getLowestTotalScore() {
         return gameRepository.getLowestTotalScore();
-    }
-
-    // Position analysis
-    public Game.Position getMostScoringPosition() {
-        List<Game> allGames = gameRepository.findAll();
-        int totalGoalieGoals = 0;
-        int totalForwardGoals = 0;
-
-        for (Game game : allGames) {
-            totalGoalieGoals += game.getTotalGoalieScore();
-            totalForwardGoals += game.getTotalForwardScore();
-        }
-
-        if (totalGoalieGoals > totalForwardGoals) {
-            return Game.Position.GOALIE;
-        } else if (totalForwardGoals > totalGoalieGoals) {
-            return Game.Position.FORWARD;
-        } else {
-            return null; // Tie
-        }
-    }
-
-    public Double getAverageGoalieGoalsPerGame() {
-        List<Game> allGames = gameRepository.findAll();
-        if (allGames.isEmpty()) return 0.0;
-
-        int totalGoalieGoals =
-                allGames.stream().mapToInt(Game::getTotalGoalieScore).sum();
-
-        return (double) totalGoalieGoals / allGames.size();
-    }
-
-    public Double getAverageForwardGoalsPerGame() {
-        List<Game> allGames = gameRepository.findAll();
-        if (allGames.isEmpty()) return 0.0;
-
-        int totalForwardGoals =
-                allGames.stream().mapToInt(Game::getTotalForwardScore).sum();
-
-        return (double) totalForwardGoals / allGames.size();
     }
 }

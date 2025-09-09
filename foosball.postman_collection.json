@@ -1,0 +1,441 @@
+{
+	"info": {
+		"_postman_id": "a8a3b4e3-94e2-4f1f-8a3c-9e6b4b4e4e4e",
+		"name": "Foosball API",
+		"description": "A collection of requests for the Foosball Backend Service.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Player Management",
+			"item": [
+				{
+					"name": "Create Player",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New Player\",\n    \"email\": \"new.player@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/players",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"players"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Players",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/players",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"players"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Player by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/players/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"players",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Players",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/players/search?name=Alice",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"players",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Alice"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Game Management",
+			"item": [
+				{
+					"name": "Record Basic Game",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"whiteTeamPlayer1\": \"Alice\",\n    \"whiteTeamPlayer2\": \"Bob\",\n    \"blackTeamPlayer1\": \"Charlie\",\n    \"blackTeamPlayer2\": \"Diana\",\n    \"whiteTeamScore\": 5,\n    \"blackTeamScore\": 3\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/games",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Games",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/games",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Game by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/games/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"games",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recent Games",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/games/recent",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"games",
+								"recent"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Player Statistics",
+			"item": [
+				{
+					"name": "All Player Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/stats/players/all",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"stats",
+								"players",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Top Players by Win %",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/stats/players/top-win-percentage?minGames=5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"stats",
+								"players",
+								"top-win-percentage"
+							],
+							"query": [
+								{
+									"key": "minGames",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Top Players by Total Games",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/stats/players/top-total-games?minGames=5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"stats",
+								"players",
+								"top-total-games"
+							],
+							"query": [
+								{
+									"key": "minGames",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Top Players by Wins",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/stats/players/top-wins?minGames=5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"stats",
+								"players",
+								"top-wins"
+							],
+							"query": [
+								{
+									"key": "minGames",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Team Statistics",
+			"item": [
+				{
+					"name": "All Team Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/stats/teams/all",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"stats",
+								"teams",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Top Teams by Win %",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/stats/teams/top-win-percentage?minGames=5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"stats",
+								"teams",
+								"top-win-percentage"
+							],
+							"query": [
+								{
+									"key": "minGames",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Top Teams by Average Score",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/stats/teams/top-average-score?minGames=5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"stats",
+								"teams",
+								"top-average-score"
+							],
+							"query": [
+								{
+									"key": "minGames",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Overview Statistics",
+			"item": [
+				{
+					"name": "Game Overview",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/foosball/stats/overview",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"foosball",
+								"stats",
+								"overview"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Actuator Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/actuator/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actuator",
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		}
+	]
+}

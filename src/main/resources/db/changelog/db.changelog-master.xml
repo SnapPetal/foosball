@@ -8,5 +8,6 @@
     <include file="db/changelog/changes/001-create-schema.xml"/>
     <include file="db/changelog/changes/002-create-tables.xml"/>
     <include file="db/changelog/changes/003-fix-team-stats-view.xml"/>
-
+    <include file="db/changelog/changes/004-remove-position-stats.xml"/>
+    <include file="db/changelog/changes/005-remove-game-duration.xml"/>
 </databaseChangeLog>

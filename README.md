@@ -5,8 +5,7 @@ A comprehensive backend service for tracking foosball (table soccer) game result
 ## ✨ Features
 
 - **Player Management**: Create and manage foosball players
-- **Game Recording**: Record games with team scores and position-based scoring
-- **Position Analysis**: Track goalie vs. forward performance
+- **Game Recording**: Record games with team scores
 - **Team Performance**: Analyze how players perform together
 - **Comprehensive Statistics**: Multiple leaderboards and performance metrics
 - **RESTful API**: Full REST API with Spring Data REST
@@ -81,33 +80,12 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
     "blackTeamScore": 3
   }
   ```
-- **Record Position Game**: `POST /api/foosball/games/position-record`
-  ```json
-  {
-    "whiteTeamPlayer1": "Alice",
-    "whiteTeamPlayer2": "Bob",
-    "blackTeamPlayer1": "Charlie",
-    "blackTeamPlayer2": "Diana",
-    "whiteGoalieScore": 3,
-    "whiteForwardScore": 2,
-    "blackGoalieScore": 1,
-    "blackForwardScore": 2,
-    "gameDurationMinutes": 20,
-    "notes": "Great game!"
-  }
-  ```
 
 ### Player Statistics
 - **All Player Stats**: `GET /api/foosball/stats/players/all`
 - **Top Players by Win %**: `GET /api/foosball/stats/players/top-win-percentage?minGames=5`
 - **Top Players by Total Games**: `GET /api/foosball/stats/players/top-total-games?minGames=5`
 - **Top Players by Wins**: `GET /api/foosball/stats/players/top-wins?minGames=5`
-
-### Position Statistics
-- **All Position Stats**: `GET /api/foosball/stats/position/all`
-- **Top Scorers by Total Goals**: `GET /api/foosball/stats/position/top-scorers?minGames=5`
-- **Top Goalie Scorers**: `GET /api/foosball/stats/position/top-goalies?minGames=5`
-- **Top Forward Scorers**: `GET /api/foosball/stats/position/top-forwards?minGames=5`
 
 ### Team Statistics
 - **All Team Stats**: `GET /api/foosball/stats/teams/all`
@@ -118,10 +96,8 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 - **Game Overview**: `GET /api/foosball/stats/overview`
   Returns comprehensive statistics including:
   - Total games, players, wins, draws
-  - Average scores and game duration
+  - Average scores
   - Highest/lowest scoring games
-  - Most scoring position (Goalie vs Forward)
-  - Average goals per position per game
 
 ## 📊 Data Models
 
@@ -133,29 +109,25 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ### Game Entity
 - Team composition (4 players)
 - Total scores
-- Position-based scores (goalie/forward)
 - Game metadata (duration, notes)
 - Winner determination
 
 ### Statistics Views
 - **Player Stats**: Games played, wins, win percentage
-- **Position Stats**: Goalie vs. forward performance
 - **Team Stats**: Player pairing performance
 
 ## 🗄️ Database Schema
 
 ### Tables
 - `players` - Player information
-- `games` - Game results with position scoring
+- `games` - Game results
 
 ### Views
 - `player_stats` - Player performance statistics (games, wins, win percentage)
-- `position_stats` - Position-based performance (goalie vs forward goals)
 - `team_stats` - Team performance metrics (win percentage, average scores)
 
 ### Database Features
 - **Automatic Winner Calculation**: Games automatically determine winners based on scores
-- **Position Scoring**: Separate tracking of goalie and forward goals
 - **Team Performance**: Analysis of player pairing effectiveness
 - **Comprehensive Statistics**: Multiple leaderboards and performance metrics
 
@@ -210,11 +182,19 @@ mvn test -Dspring.profiles.active=test
 ```
 
 ### API Testing
+A Postman collection is available for testing the API endpoints. You can import the `foosball.postman_collection.json` file into Postman to get started.
+
+The collection includes requests for all major endpoints, including:
+- Player management
+- Game recording
+- Statistics
+- Health checks
+
 ```bash
-# Test the application
+# Example: Test the application
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 
-# Test endpoints (in another terminal)
+# Test endpoints using the Postman collection or curl
 curl http://localhost:8080/api/foosball/stats/overview
 curl http://localhost:8080/api/foosball/players
 curl http://localhost:8080/api/foosball/games
@@ -291,17 +271,17 @@ For questions and support:
 The application is fully functional with all endpoints working correctly:
 
 - ✅ **Player Management**: Full CRUD operations working
-- ✅ **Game Recording**: Both basic and position-based games working
-- ✅ **Statistics**: All statistical endpoints returning correct data
+- ✅ **Game Recording**: Basic game recording is working.
+- ✅ **Statistics**: All statistical endpoints returning correct data.
 - ✅ **Database**: Proper schema with all views and relationships
 - ✅ **API**: Clean JSON responses without circular references
 - ✅ **CORS**: Properly configured for frontend integration
 
 ### Verified Endpoints
-All 25+ API endpoints have been tested and verified to return correct data:
+All API endpoints have been tested and verified to return correct data:
 - Player endpoints (4)
-- Game endpoints (5) 
-- Statistics endpoints (16+)
+- Game endpoints (4) 
+- Statistics endpoints (8+)
 - Health and monitoring endpoints
 
 ---

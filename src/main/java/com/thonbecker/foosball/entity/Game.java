@@ -49,19 +49,6 @@ public class Game {
     @Column(name = "black_team_score", nullable = false)
     private Integer blackTeamScore = 0;
 
-    // Position-based scoring
-    @Column(name = "white_team_goalie_score")
-    private Integer whiteTeamGoalieScore = 0;
-
-    @Column(name = "white_team_forward_score")
-    private Integer whiteTeamForwardScore = 0;
-
-    @Column(name = "black_team_goalie_score")
-    private Integer blackTeamGoalieScore = 0;
-
-    @Column(name = "black_team_forward_score")
-    private Integer blackTeamForwardScore = 0;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "winner", length = 10)
     private TeamColor winner;
@@ -70,21 +57,12 @@ public class Game {
     @Column(name = "played_at", nullable = false, updatable = false)
     private LocalDateTime playedAt;
 
-    // Game metadata
-    @Column(name = "game_duration_minutes")
-    private Integer gameDurationMinutes;
-
     @Column(name = "notes", length = 500)
     private String notes;
 
     public enum TeamColor {
         WHITE,
         BLACK
-    }
-
-    public enum Position {
-        GOALIE,
-        FORWARD
     }
 
     // Constructors
@@ -101,19 +79,6 @@ public class Game {
     public void setScores(int whiteTeamScore, int blackTeamScore) {
         this.whiteTeamScore = whiteTeamScore;
         this.blackTeamScore = blackTeamScore;
-        determineWinner();
-    }
-
-    public void setPositionScores(
-            int whiteGoalieScore, int whiteForwardScore, int blackGoalieScore, int blackForwardScore) {
-        this.whiteTeamGoalieScore = whiteGoalieScore;
-        this.whiteTeamForwardScore = whiteForwardScore;
-        this.blackTeamGoalieScore = blackGoalieScore;
-        this.blackTeamForwardScore = blackForwardScore;
-
-        // Update total scores
-        this.whiteTeamScore = whiteGoalieScore + whiteForwardScore;
-        this.blackTeamScore = blackGoalieScore + blackForwardScore;
         determineWinner();
     }
 
@@ -137,44 +102,6 @@ public class Game {
 
     public boolean isBlackTeamWinner() {
         return TeamColor.BLACK.equals(winner);
-    }
-
-    // Position analysis methods
-    public int getWhiteTeamGoalieScore() {
-        return whiteTeamGoalieScore != null ? whiteTeamGoalieScore : 0;
-    }
-
-    public int getWhiteTeamForwardScore() {
-        return whiteTeamForwardScore != null ? whiteTeamForwardScore : 0;
-    }
-
-    public int getBlackTeamGoalieScore() {
-        return blackTeamGoalieScore != null ? blackTeamGoalieScore : 0;
-    }
-
-    public int getBlackTeamForwardScore() {
-        return blackTeamForwardScore != null ? blackTeamForwardScore : 0;
-    }
-
-    public int getTotalGoalieScore() {
-        return getWhiteTeamGoalieScore() + getBlackTeamGoalieScore();
-    }
-
-    public int getTotalForwardScore() {
-        return getWhiteTeamForwardScore() + getBlackTeamForwardScore();
-    }
-
-    public Position getHighestScoringPosition() {
-        int goalieTotal = getTotalGoalieScore();
-        int forwardTotal = getTotalForwardScore();
-
-        if (goalieTotal > forwardTotal) {
-            return Position.GOALIE;
-        } else if (forwardTotal > goalieTotal) {
-            return Position.FORWARD;
-        } else {
-            return null; // Tie
-        }
     }
 
     // Getters and Setters
@@ -234,22 +161,6 @@ public class Game {
         this.blackTeamScore = blackTeamScore;
     }
 
-    public void setWhiteTeamGoalieScore(Integer whiteTeamGoalieScore) {
-        this.whiteTeamGoalieScore = whiteTeamGoalieScore;
-    }
-
-    public void setWhiteTeamForwardScore(Integer whiteTeamForwardScore) {
-        this.whiteTeamForwardScore = whiteTeamForwardScore;
-    }
-
-    public void setBlackTeamGoalieScore(Integer blackTeamGoalieScore) {
-        this.blackTeamGoalieScore = blackTeamGoalieScore;
-    }
-
-    public void setBlackTeamForwardScore(Integer blackTeamForwardScore) {
-        this.blackTeamForwardScore = blackTeamForwardScore;
-    }
-
     public TeamColor getWinner() {
         return winner;
     }
@@ -264,14 +175,6 @@ public class Game {
 
     public void setPlayedAt(LocalDateTime playedAt) {
         this.playedAt = playedAt;
-    }
-
-    public Integer getGameDurationMinutes() {
-        return gameDurationMinutes;
-    }
-
-    public void setGameDurationMinutes(Integer gameDurationMinutes) {
-        this.gameDurationMinutes = gameDurationMinutes;
     }
 
     public String getNotes() {
@@ -291,13 +194,8 @@ public class Game {
                 + (blackTeamPlayer1 != null ? blackTeamPlayer1.getName() : "null") + ", blackTeamPlayer2="
                 + (blackTeamPlayer2 != null ? blackTeamPlayer2.getName() : "null") + ", whiteTeamScore="
                 + whiteTeamScore + ", blackTeamScore="
-                + blackTeamScore + ", whiteTeamGoalieScore="
-                + whiteTeamGoalieScore + ", whiteTeamForwardScore="
-                + whiteTeamForwardScore + ", blackTeamGoalieScore="
-                + blackTeamGoalieScore + ", blackTeamForwardScore="
-                + blackTeamForwardScore + ", winner="
+                + blackTeamScore + ", winner="
                 + winner + ", playedAt="
-                + playedAt + ", gameDurationMinutes="
-                + gameDurationMinutes + '}';
+                + playedAt + '}';
     }
 }

@@ -2,7 +2,6 @@ package com.thonbecker.foosball.repository;
 
 import com.thonbecker.foosball.entity.Player;
 import com.thonbecker.foosball.projection.PlayerStats;
-import com.thonbecker.foosball.projection.PositionStats;
 import com.thonbecker.foosball.projection.TeamStats;
 import java.util.List;
 import java.util.Optional;
@@ -51,33 +50,6 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
             value = "SELECT * FROM foosball.player_stats WHERE total_games >= :minGames ORDER BY wins DESC",
             nativeQuery = true)
     List<PlayerStats> findTopPlayersByWins(int minGames);
-
-    // Position-based stats queries
-    @Query(value = "SELECT * FROM foosball.position_stats ORDER BY total_goals DESC", nativeQuery = true)
-    List<PositionStats> findAllPositionStatsOrderedByTotalGoals();
-
-    @Query(value = "SELECT * FROM foosball.position_stats ORDER BY total_goalie_goals DESC", nativeQuery = true)
-    List<PositionStats> findAllPositionStatsOrderedByGoalieGoals();
-
-    @Query(value = "SELECT * FROM foosball.position_stats ORDER BY total_forward_goals DESC", nativeQuery = true)
-    List<PositionStats> findAllPositionStatsOrderedByForwardGoals();
-
-    @Query(
-            value = "SELECT * FROM foosball.position_stats WHERE total_games >= :minGames ORDER BY total_goals DESC",
-            nativeQuery = true)
-    List<PositionStats> findTopScorersByTotalGoals(int minGames);
-
-    @Query(
-            value =
-                    "SELECT * FROM foosball.position_stats WHERE total_games >= :minGames ORDER BY total_goalie_goals DESC",
-            nativeQuery = true)
-    List<PositionStats> findTopGoalieScorers(int minGames);
-
-    @Query(
-            value =
-                    "SELECT * FROM foosball.position_stats WHERE total_games >= :minGames ORDER BY total_forward_goals DESC",
-            nativeQuery = true)
-    List<PositionStats> findTopForwardScorers(int minGames);
 
     // Team performance queries
     @Query(value = "SELECT * FROM foosball.team_stats ORDER BY win_percentage DESC", nativeQuery = true)

@@ -65,66 +65,26 @@ public class DataLoader {
             return;
         }
 
-        // Record some sample games with position-based scoring
-        foosballService.recordGameWithPositionScores(
-                alice,
-                bob,
-                charlie,
-                diana, // White team: Alice (goalie), Bob (forward)
-                3,
-                2,
-                1,
-                4, // White: 3 goalie + 2 forward = 5 total, Black: 1 goalie + 4 forward = 5 total
-                15,
-                "Great game, very close!");
+        // Record some sample games
+        foosballService.recordGame(
+                alice, bob, charlie, diana, // White team: Alice, Bob
+                5, 5); // Draw
 
-        foosballService.recordGameWithPositionScores(
-                eve,
-                frank,
-                alice,
-                bob, // White team: Eve (goalie), Frank (forward)
-                2,
-                3,
-                1,
-                2, // White: 2 goalie + 3 forward = 5 total, Black: 1 goalie + 2 forward = 3 total
-                12,
-                "Eve and Frank dominated!");
+        foosballService.recordGame(
+                eve, frank, alice, bob, // White team: Eve, Frank
+                5, 3);
 
-        foosballService.recordGameWithPositionScores(
-                charlie,
-                diana,
-                eve,
-                frank, // White team: Charlie (goalie), Diana (forward)
-                4,
-                1,
-                2,
-                3, // White: 4 goalie + 1 forward = 5 total, Black: 2 goalie + 3 forward = 5 total
-                18,
-                "Another close match!");
+        foosballService.recordGame(
+                charlie, diana, eve, frank, // White team: Charlie, Diana
+                5, 5); // Draw
 
-        foosballService.recordGameWithPositionScores(
-                bob,
-                alice,
-                charlie,
-                diana, // White team: Bob (goalie), Alice (forward)
-                1,
-                4,
-                2,
-                2, // White: 1 goalie + 4 forward = 5 total, Black: 2 goalie + 2 forward = 4 total
-                14,
-                "Bob and Alice make a great team!");
+        foosballService.recordGame(
+                bob, alice, charlie, diana, // White team: Bob, Alice
+                5, 4);
 
-        foosballService.recordGameWithPositionScores(
-                frank,
-                eve,
-                bob,
-                alice, // White team: Frank (goalie), Eve (forward)
-                3,
-                2,
-                1,
-                3, // White: 3 goalie + 2 forward = 5 total, Black: 1 goalie + 3 forward = 4 total
-                16,
-                "Frank's goalie skills are improving!");
+        foosballService.recordGame(
+                frank, eve, bob, alice, // White team: Frank, Eve
+                5, 4);
 
         System.out.println("Sample data loaded successfully!");
         System.out.println("Total players: " + foosballService.getTotalPlayers());

@@ -38,15 +38,6 @@ public interface GameRepository extends JpaRepository<Game, Long> {
             "SELECT g FROM Game g WHERE g.whiteTeamScore + g.blackTeamScore >= :minTotalScore ORDER BY (g.whiteTeamScore + g.blackTeamScore) DESC")
     List<Game> findHighScoringGames(@Param("minTotalScore") Integer minTotalScore);
 
-    @RestResource(path = "by-duration", rel = "by-duration")
-    @Query("SELECT g FROM Game g WHERE g.gameDurationMinutes >= :minDuration ORDER BY g.gameDurationMinutes DESC")
-    List<Game> findByMinimumDuration(@Param("minDuration") Integer minDuration);
-
-    @RestResource(path = "by-position-performance", rel = "by-position-performance")
-    @Query(
-            "SELECT g FROM Game g WHERE g.whiteTeamGoalieScore + g.whiteTeamForwardScore + g.blackTeamGoalieScore + g.blackTeamForwardScore >= :minPositionScore ORDER BY g.playedAt DESC")
-    List<Game> findByPositionScore(@Param("minPositionScore") Integer minPositionScore);
-
     // Statistics queries
     @Query("SELECT COUNT(g) FROM Game g WHERE g.winner IS NOT NULL")
     Long countGamesWithWinner();
@@ -56,9 +47,6 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     @Query("SELECT AVG(g.whiteTeamScore + g.blackTeamScore) FROM Game g")
     Double getAverageTotalScore();
-
-    @Query("SELECT AVG(g.gameDurationMinutes) FROM Game g WHERE g.gameDurationMinutes IS NOT NULL")
-    Double getAverageGameDuration();
 
     @Query("SELECT MAX(g.whiteTeamScore + g.blackTeamScore) FROM Game g")
     Integer getHighestTotalScore();
