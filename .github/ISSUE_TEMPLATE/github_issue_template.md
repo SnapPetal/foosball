@@ -1,43 +1,54 @@
-Issue Title: A short, descriptive title of the issue
-Issue Type
+# Issue Title
+A short, descriptive title of the issue
 
-    [ ] Bug Report
+# Issue Type
+- [ ] Bug Report
+- [ ] Feature Request
+- [ ] Enhancement
+- [ ] Documentation
+- [ ] Other (please specify)
 
-    [ ] Feature Request
-
-    [ ] Enhancement
-
-    [ ] Documentation
-
-    [ ] Other (please specify)
-
-Description
-
+# Description
 A clear and concise description of the issue. Provide context for what you were trying to do and what went wrong.
-For Bug Reports:
-Steps to Reproduce
 
-    Go to '...'
+---
 
-    Click on '....'
+## Environment
+- OS:
+- Application version:
+- Java version:
+- Other relevant info:
 
-    Scroll down to '....'
+## Screenshots/Logs
+*If applicable, add screenshots or log output to help explain your problem.*
 
-    See error '....'
+## Steps to Reproduce (for bugs)
+*Please provide a minimal reproducible example.*
+1. Go to '...'
+2. Click on '...'
+3. Scroll down to '...'
+4. See error '...'
 
-Expected Behavior
-
+## Expected Behavior
 A clear and concise description of what you expected to happen.
-Actual Behavior
 
+## Actual Behavior
 A clear and concise description of what actually happened.
-For Feature Requests or Enhancements:
-Rationale/Problem
 
-Describe the problem this new feature or enhancement would solve. Why is it needed?
-Proposed Solution
+## Reproducibility
+- [ ] Always
+- [ ] Sometimes
+- [ ] Rarely
+- [ ] Unable to reproduce
 
-A clear and concise description of the feature or enhancement you're suggesting.
-Additional Context or Screenshots
-
+## Additional Context
 Add any other context, links, or screenshots about the issue here.
+
+---
+
+# For Feature Requests or Enhancements
+## Rationale/Problem
+Describe the problem this new feature or enhancement would solve. Why is it needed?
+
+## Proposed Solution
+A clear and concise description of the feature or enhancement you're suggesting.
