@@ -90,6 +90,10 @@ public class FoosballService {
         return playerRepository.findAllPlayerStatsOrderedByWinPercentage();
     }
 
+    public List<PlayerStats> getAllPlayerStatsOrderedByRankScore() {
+        return playerRepository.findAllPlayerStatsOrderedByRankScore();
+    }
+
     public List<PlayerStats> getAllPlayerStatsOrderedByTotalGames() {
         return playerRepository.findAllPlayerStatsOrderedByTotalGames();
     }

@@ -130,6 +130,12 @@ public class FoosballController {
         return ResponseEntity.ok(stats);
     }
 
+    @GetMapping("/stats/players/all-ranked")
+    public ResponseEntity<List<PlayerStats>> getAllRankedPlayerStats() {
+        List<PlayerStats> stats = foosballService.getAllPlayerStatsOrderedByRankScore();
+        return ResponseEntity.ok(stats);
+    }
+
     // Team performance statistics
     @GetMapping("/stats/teams/top-win-percentage")
     public ResponseEntity<List<TeamStats>> getTopTeamsByWinPercentage(@RequestParam(defaultValue = "5") int minGames) {
