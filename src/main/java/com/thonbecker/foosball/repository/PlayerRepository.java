@@ -29,11 +29,6 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     List<PlayerStats> findAllPlayerStatsOrderedByWinPercentage();
 
     @Query(
-            value = "SELECT COUNT(*) FROM foosball.games",
-            nativeQuery = true)
-    List<PlayerStats> totalGames();
-
-    @Query(
             value = "SELECT *, " +
                     "(1000 + ((wins * 25) - ((total_games - wins) * 10))) AS rank_score " +
                     "FROM foosball.player_stats " +
