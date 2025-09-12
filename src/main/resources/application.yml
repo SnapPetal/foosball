@@ -52,7 +52,3 @@ management:
         include: "*"
   health:
     default-timeout: 180s
-    db:
-      timeout: 120s
-    diskspace:
-      timeout: 30s
