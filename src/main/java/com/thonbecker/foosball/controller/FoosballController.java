@@ -126,12 +126,6 @@ public class FoosballController {
 
     @GetMapping("/stats/players/all")
     public ResponseEntity<List<PlayerStats>> getAllPlayerStats() {
-        List<PlayerStats> stats = foosballService.getAllPlayerStatsOrderedByWinPercentage();
-        return ResponseEntity.ok(stats);
-    }
-
-    @GetMapping("/stats/players/all-ranked")
-    public ResponseEntity<List<PlayerStats>> getAllRankedPlayerStats() {
         List<PlayerStats> stats = foosballService.getAllPlayerStatsOrderedByRankScore();
         return ResponseEntity.ok(stats);
     }
