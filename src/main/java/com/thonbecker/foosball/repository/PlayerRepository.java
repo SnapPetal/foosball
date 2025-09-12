@@ -29,6 +29,15 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     List<PlayerStats> findAllPlayerStatsOrderedByWinPercentage();
 
     @Query(
+            value = "SELECT *, " +
+                    "(1000 + ((wins * 25) - ((total_games - wins) * 10))) AS rank_score " +
+                    "FROM foosball.player_stats " +
+                    "WHERE total_games >= 5 " +
+                    "ORDER BY rank_score DESC",
+            nativeQuery = true)
+    List<PlayerStats> findAllPlayerStatsOrderedByRankScore();
+
+    @Query(
             value = "SELECT * FROM foosball.player_stats ORDER BY total_games DESC, win_percentage DESC",
             nativeQuery = true)
     List<PlayerStats> findAllPlayerStatsOrderedByTotalGames();
