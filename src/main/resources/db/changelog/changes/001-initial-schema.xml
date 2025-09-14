@@ -1,76 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
-    <changeSet id="002-create-tables" author="foosball-app">
-        
+    <changeSet id="002-initial-schema" author="thonbecker">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="players" schemaName="foosball" />
+            </not>
+        </preConditions>
+
         <!-- Players table -->
         <createTable tableName="players" schemaName="foosball">
             <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="name" type="VARCHAR(100)">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false" unique="true" />
             </column>
             <column name="email" type="VARCHAR(255)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
         </createTable>
 
         <!-- Games table -->
         <createTable tableName="games" schemaName="foosball">
             <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="white_team_player1_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_games_white_player1" references="foosball.players(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_games_white_player1"
+                    references="foosball.players(id)" />
             </column>
             <column name="white_team_player2_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_games_white_player2" references="foosball.players(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_games_white_player2"
+                    references="foosball.players(id)" />
             </column>
             <column name="black_team_player1_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_games_black_player1" references="foosball.players(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_games_black_player1"
+                    references="foosball.players(id)" />
             </column>
             <column name="black_team_player2_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_games_black_player2" references="foosball.players(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_games_black_player2"
+                    references="foosball.players(id)" />
             </column>
             <column name="white_team_score" type="INTEGER" defaultValue="0">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
             <column name="black_team_score" type="INTEGER" defaultValue="0">
-                <constraints nullable="false"/>
-            </column>
-            <!-- Position-based scoring -->
-            <column name="white_team_goalie_score" type="INTEGER" defaultValue="0">
-                <constraints nullable="true"/>
-            </column>
-            <column name="white_team_forward_score" type="INTEGER" defaultValue="0">
-                <constraints nullable="true"/>
-            </column>
-            <column name="black_team_goalie_score" type="INTEGER" defaultValue="0">
-                <constraints nullable="true"/>
-            </column>
-            <column name="black_team_forward_score" type="INTEGER" defaultValue="0">
-                <constraints nullable="true"/>
+                <constraints nullable="false" />
             </column>
             <column name="winner" type="VARCHAR(10)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="played_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
-            <!-- Game metadata -->
             <column name="game_duration_minutes" type="INTEGER">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="notes" type="VARCHAR(500)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
         </createTable>
 
@@ -86,29 +80,6 @@
                 (COUNT(CASE WHEN g.winner = 'WHITE' AND (g.white_team_player1_id = p.id OR g.white_team_player2_id = p.id) THEN 1 END) +
                  COUNT(CASE WHEN g.winner = 'BLACK' AND (g.black_team_player1_id = p.id OR g.black_team_player2_id = p.id) THEN 1 END)) * 100.0 / 
                 NULLIF(COUNT(DISTINCT g.id), 0) as win_percentage
-            FROM foosball.players p
-            LEFT JOIN foosball.games g ON p.id IN (g.white_team_player1_id, g.white_team_player2_id, g.black_team_player1_id, g.black_team_player2_id)
-            GROUP BY p.id, p.name;
-        ]]></sql>
-
-        <!-- Position-based stats view -->
-        <sql><![CDATA[
-            CREATE OR REPLACE VIEW foosball.position_stats AS
-            SELECT 
-                p.id,
-                p.name,
-                COUNT(DISTINCT g.id) as total_games,
-                -- Goalie performance (assuming player1 is always goalie)
-                SUM(CASE WHEN g.white_team_player1_id = p.id THEN COALESCE(g.white_team_goalie_score, 0) ELSE 0 END) +
-                SUM(CASE WHEN g.black_team_player1_id = p.id THEN COALESCE(g.black_team_goalie_score, 0) ELSE 0 END) as total_goalie_goals,
-                -- Forward performance (assuming player2 is always forward)
-                SUM(CASE WHEN g.white_team_player2_id = p.id THEN COALESCE(g.white_team_forward_score, 0) ELSE 0 END) +
-                SUM(CASE WHEN g.black_team_player2_id = p.id THEN COALESCE(g.black_team_forward_score, 0) ELSE 0 END) as total_forward_goals,
-                -- Total goals
-                SUM(CASE WHEN g.white_team_player1_id = p.id THEN COALESCE(g.white_team_goalie_score, 0) ELSE 0 END) +
-                SUM(CASE WHEN g.white_team_player2_id = p.id THEN COALESCE(g.white_team_forward_score, 0) ELSE 0 END) +
-                SUM(CASE WHEN g.black_team_player1_id = p.id THEN COALESCE(g.black_team_goalie_score, 0) ELSE 0 END) +
-                SUM(CASE WHEN g.black_team_player2_id = p.id THEN COALESCE(g.black_team_forward_score, 0) ELSE 0 END) as total_goals
             FROM foosball.players p
             LEFT JOIN foosball.games g ON p.id IN (g.white_team_player1_id, g.white_team_player2_id, g.black_team_player1_id, g.black_team_player2_id)
             GROUP BY p.id, p.name;
@@ -145,25 +116,18 @@
 
         <!-- Indexes for better performance -->
         <createIndex tableName="games" indexName="idx_games_players" schemaName="foosball">
-            <column name="white_team_player1_id"/>
-            <column name="white_team_player2_id"/>
-            <column name="black_team_player1_id"/>
-            <column name="black_team_player2_id"/>
+            <column name="white_team_player1_id" />
+            <column name="white_team_player2_id" />
+            <column name="black_team_player1_id" />
+            <column name="black_team_player2_id" />
         </createIndex>
 
         <createIndex tableName="games" indexName="idx_games_played_at" schemaName="foosball">
-            <column name="played_at"/>
-        </createIndex>
-
-        <createIndex tableName="games" indexName="idx_games_position_scores" schemaName="foosball">
-            <column name="white_team_goalie_score"/>
-            <column name="white_team_forward_score"/>
-            <column name="black_team_goalie_score"/>
-            <column name="black_team_forward_score"/>
+            <column name="played_at" />
         </createIndex>
 
         <createIndex tableName="players" indexName="idx_players_name" schemaName="foosball">
-            <column name="name"/>
+            <column name="name" />
         </createIndex>
 
     </changeSet>

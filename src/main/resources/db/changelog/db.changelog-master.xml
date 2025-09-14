@@ -1,13 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <include file="db/changelog/changes/001-create-schema.xml"/>
-    <include file="db/changelog/changes/002-create-tables.xml"/>
-    <include file="db/changelog/changes/003-fix-team-stats-view.xml"/>
-    <include file="db/changelog/changes/004-remove-position-stats.xml"/>
-    <include file="db/changelog/changes/005-remove-game-duration.xml"/>
+    <!-- Include all changesets -->
+    <include file="classpath:db/changelog/changes/000-create-schema.xml" />
+    <include file="classpath:db/changelog/changes/001-initial-schema.xml" />
 </databaseChangeLog>
