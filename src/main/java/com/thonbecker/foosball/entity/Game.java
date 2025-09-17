@@ -5,9 +5,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@Getter
+@Setter
+@ToString(exclude = {"whiteTeamPlayer1", "whiteTeamPlayer2", "blackTeamPlayer1", "blackTeamPlayer2"})
+@EqualsAndHashCode(of = "id")
+@NoArgsConstructor
 @Entity
 @Table(name = "games", schema = "foosball")
 @EntityListeners(AuditingEntityListener.class)
@@ -65,9 +71,6 @@ public class Game {
         BLACK
     }
 
-    // Constructors
-    public Game() {}
-
     public Game(Player whiteTeamPlayer1, Player whiteTeamPlayer2, Player blackTeamPlayer1, Player blackTeamPlayer2) {
         this.whiteTeamPlayer1 = whiteTeamPlayer1;
         this.whiteTeamPlayer2 = whiteTeamPlayer2;
@@ -102,100 +105,5 @@ public class Game {
 
     public boolean isBlackTeamWinner() {
         return TeamColor.BLACK.equals(winner);
-    }
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Player getWhiteTeamPlayer1() {
-        return whiteTeamPlayer1;
-    }
-
-    public void setWhiteTeamPlayer1(Player whiteTeamPlayer1) {
-        this.whiteTeamPlayer1 = whiteTeamPlayer1;
-    }
-
-    public Player getWhiteTeamPlayer2() {
-        return whiteTeamPlayer2;
-    }
-
-    public void setWhiteTeamPlayer2(Player whiteTeamPlayer2) {
-        this.whiteTeamPlayer2 = whiteTeamPlayer2;
-    }
-
-    public Player getBlackTeamPlayer1() {
-        return blackTeamPlayer1;
-    }
-
-    public void setBlackTeamPlayer1(Player blackTeamPlayer1) {
-        this.blackTeamPlayer1 = blackTeamPlayer1;
-    }
-
-    public Player getBlackTeamPlayer2() {
-        return blackTeamPlayer2;
-    }
-
-    public void setBlackTeamPlayer2(Player blackTeamPlayer2) {
-        this.blackTeamPlayer2 = blackTeamPlayer2;
-    }
-
-    public Integer getWhiteTeamScore() {
-        return whiteTeamScore;
-    }
-
-    public void setWhiteTeamScore(Integer whiteTeamScore) {
-        this.whiteTeamScore = whiteTeamScore;
-    }
-
-    public Integer getBlackTeamScore() {
-        return blackTeamScore;
-    }
-
-    public void setBlackTeamScore(Integer blackTeamScore) {
-        this.blackTeamScore = blackTeamScore;
-    }
-
-    public TeamColor getWinner() {
-        return winner;
-    }
-
-    public void setWinner(TeamColor winner) {
-        this.winner = winner;
-    }
-
-    public LocalDateTime getPlayedAt() {
-        return playedAt;
-    }
-
-    public void setPlayedAt(LocalDateTime playedAt) {
-        this.playedAt = playedAt;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    @Override
-    public String toString() {
-        return "Game{" + "id="
-                + id + ", whiteTeamPlayer1="
-                + (whiteTeamPlayer1 != null ? whiteTeamPlayer1.getName() : "null") + ", whiteTeamPlayer2="
-                + (whiteTeamPlayer2 != null ? whiteTeamPlayer2.getName() : "null") + ", blackTeamPlayer1="
-                + (blackTeamPlayer1 != null ? blackTeamPlayer1.getName() : "null") + ", blackTeamPlayer2="
-                + (blackTeamPlayer2 != null ? blackTeamPlayer2.getName() : "null") + ", whiteTeamScore="
-                + whiteTeamScore + ", blackTeamScore="
-                + blackTeamScore + ", winner="
-                + winner + ", playedAt="
-                + playedAt + '}';
     }
 }

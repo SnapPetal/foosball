@@ -7,9 +7,16 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@Getter
+@Setter
+@ToString(
+        exclude = {"whiteTeamPlayer1Games", "whiteTeamPlayer2Games", "blackTeamPlayer1Games", "blackTeamPlayer2Games"})
+@EqualsAndHashCode(of = "id")
+@NoArgsConstructor
 @Entity
 @Table(name = "players", schema = "foosball")
 @EntityListeners(AuditingEntityListener.class)
@@ -48,9 +55,6 @@ public class Player {
     @JsonManagedReference
     private List<Game> blackTeamPlayer2Games = new ArrayList<>();
 
-    // Constructors
-    public Player() {}
-
     public Player(String name) {
         this.name = name;
     }
@@ -58,79 +62,5 @@ public class Player {
     public Player(String name, String email) {
         this.name = name;
         this.email = email;
-    }
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public List<Game> getWhiteTeamPlayer1Games() {
-        return whiteTeamPlayer1Games;
-    }
-
-    public void setWhiteTeamPlayer1Games(List<Game> whiteTeamPlayer1Games) {
-        this.whiteTeamPlayer1Games = whiteTeamPlayer1Games;
-    }
-
-    public List<Game> getWhiteTeamPlayer2Games() {
-        return whiteTeamPlayer2Games;
-    }
-
-    public void setWhiteTeamPlayer2Games(List<Game> whiteTeamPlayer2Games) {
-        this.whiteTeamPlayer2Games = whiteTeamPlayer2Games;
-    }
-
-    public List<Game> getBlackTeamPlayer1Games() {
-        return blackTeamPlayer1Games;
-    }
-
-    public void setBlackTeamPlayer1Games(List<Game> blackTeamPlayer1Games) {
-        this.blackTeamPlayer1Games = blackTeamPlayer1Games;
-    }
-
-    public List<Game> getBlackTeamPlayer2Games() {
-        return blackTeamPlayer2Games;
-    }
-
-    public void setBlackTeamPlayer2Games(List<Game> blackTeamPlayer2Games) {
-        this.blackTeamPlayer2Games = blackTeamPlayer2Games;
-    }
-
-    @Override
-    public String toString() {
-        return "Player{" + "id="
-                + id + ", name='"
-                + name + '\'' + ", email='"
-                + email + '\'' + ", createdAt="
-                + createdAt + '}';
     }
 }
