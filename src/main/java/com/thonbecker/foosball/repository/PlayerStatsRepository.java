@@ -50,7 +50,7 @@ public interface PlayerStatsRepository extends Repository<Player, Long> {
 
     @Query(
             value =
-                    "SELECT player_id, name, total_games, wins, win_percentage FROM foosball.player_stats WHERE total_games >= :minGames ORDER BY wins DESC",
+                    "SELECT id, name, total_games, wins, win_percentage FROM foosball.player_stats WHERE total_games >= :minGames ORDER BY wins DESC",
             nativeQuery = true)
     List<PlayerStats> findTopPlayersByWins(@Param("minGames") int minGames);
 }
