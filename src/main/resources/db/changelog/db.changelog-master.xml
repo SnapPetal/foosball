@@ -7,4 +7,5 @@
     <!-- Include all changesets -->
     <include file="classpath:db/changelog/changes/000-create-schema.xml" />
     <include file="classpath:db/changelog/changes/001-initial-schema.xml" />
+    <include file="classpath:db/changelog/changes/002-update-team-stats-view.xml" />
 </databaseChangeLog>

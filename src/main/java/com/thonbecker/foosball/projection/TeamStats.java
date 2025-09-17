@@ -19,23 +19,19 @@ public interface TeamStats {
     @Value("#{target.games_played_together}")
     Long getGamesPlayedTogether();
 
-    @Value("#{target.wins_together}")
-    Long getWinsTogether();
+    @Value("#{target.wins}")
+    Long getWins();
+
+    @Value("#{target.win_percentage}")
+    Double getWinPercentage();
 
     @Value("#{target.avg_team_score}")
     Double getAverageTeamScore();
 
-    default Long getLossesTogether() {
+    default Long getLosses() {
         Long games = getGamesPlayedTogether();
-        Long wins = getWinsTogether();
+        Long wins = getWins();
         return games != null && wins != null ? games - wins : 0L;
-    }
-
-    default Double getWinPercentage() {
-        Long games = getGamesPlayedTogether();
-        Long wins = getWinsTogether();
-        if (games == null || wins == null || games == 0) return 0.0;
-        return (double) wins / games * 100.0;
     }
 
     default String getTeamName() {
@@ -47,6 +43,9 @@ public interface TeamStats {
 
     default String getFormattedWinPercentage() {
         Double percentage = getWinPercentage();
+        if (percentage == null) {
+            return "0.0%";
+        }
         return String.format("%.1f%%", percentage);
     }
 
