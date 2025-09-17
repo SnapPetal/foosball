@@ -30,7 +30,7 @@ public class FoosballController {
     // Player endpoints
     @PostMapping("/players")
     public ResponseEntity<Player> createPlayer(@RequestBody CreatePlayerRequest request) {
-        Player player = foosballService.createPlayer(request.getName(), request.getEmail());
+        Player player = foosballService.createPlayer(request.name(), request.email());
         return ResponseEntity.ok(player);
     }
 
@@ -61,13 +61,13 @@ public class FoosballController {
     @PostMapping("/games")
     public ResponseEntity<Game> recordGame(@RequestBody GameRequest request) {
         Player whiteTeamPlayer1 =
-                foosballService.findPlayerByName(request.getWhiteTeamPlayer1()).orElse(null);
+                foosballService.findPlayerByName(request.whiteTeamPlayer1()).orElse(null);
         Player whiteTeamPlayer2 =
-                foosballService.findPlayerByName(request.getWhiteTeamPlayer2()).orElse(null);
+                foosballService.findPlayerByName(request.whiteTeamPlayer2()).orElse(null);
         Player blackTeamPlayer1 =
-                foosballService.findPlayerByName(request.getBlackTeamPlayer1()).orElse(null);
+                foosballService.findPlayerByName(request.blackTeamPlayer1()).orElse(null);
         Player blackTeamPlayer2 =
-                foosballService.findPlayerByName(request.getBlackTeamPlayer2()).orElse(null);
+                foosballService.findPlayerByName(request.blackTeamPlayer2()).orElse(null);
 
         if (whiteTeamPlayer1 == null
                 || whiteTeamPlayer2 == null
@@ -81,8 +81,8 @@ public class FoosballController {
                 whiteTeamPlayer2,
                 blackTeamPlayer1,
                 blackTeamPlayer2,
-                request.getWhiteTeamScore(),
-                request.getBlackTeamScore());
+                request.whiteTeamScore(),
+                request.blackTeamScore());
         return ResponseEntity.ok(game);
     }
 
