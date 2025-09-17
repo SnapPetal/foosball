@@ -4,14 +4,14 @@ import com.thonbecker.foosball.entity.Game;
 import com.thonbecker.foosball.entity.Player;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 @RepositoryRestResource(path = "games", collectionResourceRel = "games", itemResourceRel = "game")
-public interface GameRepository extends JpaRepository<Game, Long> {
+public interface GameRepository extends CrudRepository<Game, Long> {
 
     @RestResource(path = "by-player", rel = "by-player")
     @Query(

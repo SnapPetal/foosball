@@ -6,6 +6,9 @@ import com.thonbecker.foosball.projection.PlayerStats;
 import com.thonbecker.foosball.projection.TeamStats;
 import com.thonbecker.foosball.repository.GameRepository;
 import com.thonbecker.foosball.repository.PlayerRepository;
+import com.thonbecker.foosball.repository.PlayerStatsRepository;
+import com.thonbecker.foosball.repository.TeamStatsRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +21,19 @@ public class FoosballService {
 
     private final PlayerRepository playerRepository;
     private final GameRepository gameRepository;
+    private final PlayerStatsRepository playerStatsRepository;
+    private final TeamStatsRepository teamStatsRepository;
 
     @Autowired
-    public FoosballService(PlayerRepository playerRepository, GameRepository gameRepository) {
+    public FoosballService(
+            PlayerRepository playerRepository,
+            GameRepository gameRepository,
+            PlayerStatsRepository playerStatsRepository,
+            TeamStatsRepository teamStatsRepository) {
         this.playerRepository = playerRepository;
         this.gameRepository = gameRepository;
+        this.playerStatsRepository = playerStatsRepository;
+        this.teamStatsRepository = teamStatsRepository;
     }
 
     // Player management
@@ -41,7 +52,7 @@ public class FoosballService {
     }
 
     public List<Player> getAllPlayers() {
-        return playerRepository.findAll();
+        return playerRepository.findAllByOrderByNameAsc();
     }
 
     // Game management
@@ -58,7 +69,9 @@ public class FoosballService {
     }
 
     public List<Game> getAllGames() {
-        return gameRepository.findAll();
+        List<Game> games = new ArrayList<>();
+        gameRepository.findAll().forEach(games::add);
+        return games;
     }
 
     public Optional<Game> getGameById(Long id) {
@@ -75,48 +88,48 @@ public class FoosballService {
 
     // Player statistics
     public List<PlayerStats> getTopPlayersByWinPercentage(int minGames) {
-        return playerRepository.findTopPlayersByWinPercentage(minGames);
+        return playerStatsRepository.findTopPlayersByWinPercentage(minGames);
     }
 
     public List<PlayerStats> getTopPlayersByTotalGames(int minGames) {
-        return playerRepository.findTopPlayersByTotalGames(minGames);
+        return playerStatsRepository.findTopPlayersByTotalGames(minGames);
     }
 
     public List<PlayerStats> getTopPlayersByWins(int minGames) {
-        return playerRepository.findTopPlayersByWins(minGames);
+        return playerStatsRepository.findTopPlayersByWins(minGames);
     }
 
     public List<PlayerStats> getAllPlayerStatsOrderedByWinPercentage() {
-        return playerRepository.findAllPlayerStatsOrderedByWinPercentage();
+        return playerStatsRepository.findAllPlayerStatsOrderedByWinPercentage();
     }
 
     public List<PlayerStats> getAllPlayerStatsOrderedByRankScore() {
-        return playerRepository.findAllPlayerStatsOrderedByRankScore();
+        return playerStatsRepository.findAllPlayerStatsOrderedByRankScore();
     }
 
     public List<PlayerStats> getAllPlayerStatsOrderedByTotalGames() {
-        return playerRepository.findAllPlayerStatsOrderedByTotalGames();
+        return playerStatsRepository.findAllPlayerStatsOrderedByTotalGames();
     }
 
     public List<PlayerStats> getAllPlayerStatsOrderedByWins() {
-        return playerRepository.findAllPlayerStatsOrderedByWins();
+        return playerStatsRepository.findAllPlayerStatsOrderedByWins();
     }
 
     // Team performance statistics
     public List<TeamStats> getTopTeamsByWinPercentage(int minGames) {
-        return playerRepository.findTopTeamsByWinPercentage(minGames);
+        return teamStatsRepository.findTopTeamsByWinPercentage(minGames);
     }
 
     public List<TeamStats> getTopTeamsByAverageScore(int minGames) {
-        return playerRepository.findTopTeamsByAverageScore(minGames);
+        return teamStatsRepository.findTopTeamsByAverageScore(minGames);
     }
 
     public List<TeamStats> getAllTeamStatsOrderedByWinPercentage() {
-        return playerRepository.findAllTeamStatsOrderedByWinPercentage();
+        return teamStatsRepository.findAllTeamStatsOrderedByWinPercentage();
     }
 
     public List<TeamStats> getAllTeamStatsOrderedByGamesPlayed() {
-        return playerRepository.findAllTeamStatsOrderedByGamesPlayed();
+        return teamStatsRepository.findAllTeamStatsOrderedByGamesPlayed();
     }
 
     // Overall statistics

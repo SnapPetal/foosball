@@ -27,9 +27,3 @@ spring:
 foosball:
   sample-data:
     enabled: false
-
-# Logging
-logging:
-  level:
-    com.thonbecker.foosball: INFO
-    org.springframework.data.rest: INFO
