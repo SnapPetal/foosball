@@ -14,13 +14,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableSchedulerLock(defaultLockAtMostFor = "PT30S")
 public class ShedlockConfig {
 
-  @Bean
-  public LockProvider lockProvider(DataSource dataSource) {
-    return new JdbcTemplateLockProvider(
-        JdbcTemplateLockProvider.Configuration.builder()
-            .withJdbcTemplate(new JdbcTemplate(dataSource))
-            .withTableName("foosball.shedlock")
-            .usingDbTime()
-            .build());
-  }
+    @Bean
+    public LockProvider lockProvider(DataSource dataSource) {
+        return new JdbcTemplateLockProvider(JdbcTemplateLockProvider.Configuration.builder()
+                .withJdbcTemplate(new JdbcTemplate(dataSource))
+                .withTableName("foosball.shedlock")
+                .usingDbTime()
+                .build());
+    }
 }
