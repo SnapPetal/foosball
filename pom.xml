@@ -19,7 +19,7 @@
     <liquibase.version>4.33.0</liquibase.version>
     <lombok.version>1.18.40</lombok.version>
     <postgresql.version>42.7.7</postgresql.version>
-    <shedlock.version>5.14.0</shedlock.version>
+    <shedlock.version>6.10.0</shedlock.version>
     <sortpom.version>4.0.0</sortpom.version>
     <spotless.version>2.46.1</spotless.version>
   </properties>
