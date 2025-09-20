@@ -33,5 +33,3 @@ management:
     web:
       exposure:
         include: "*"
-  health:
-    start_period: 600s
