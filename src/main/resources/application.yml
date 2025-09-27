@@ -26,6 +26,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
+          audience: https://foosball.thonbecker.biz
           issuer-uri: https://thonbecker.us.auth0.com/.well-known/openid-configuration
 
 server:
