@@ -26,7 +26,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_4sQSeLxDa/.well-known/openid-configuration
+          issuer-uri: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_4sQSeLxDa
+          jwk-set-uri: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_4sQSeLxDa/.well-known/jwks.json
 
 server:
   port: 8080
