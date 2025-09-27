@@ -26,7 +26,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://thonbecker.us.auth0.com/
+          issuer-uri: https://thonbecker.us.auth0.com/.well-known/openid-configuration
 
 server:
   port: 8080
