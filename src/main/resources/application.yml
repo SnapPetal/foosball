@@ -26,8 +26,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          audiences: https://foosball.thonbecker.biz
-          issuer-uri: https://thonbecker.us.auth0.com/.well-known/openid-configuration
+          issuer-uri: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_4sQSeLxDa/.well-known/openid-configuration
 
 server:
   port: 8080
