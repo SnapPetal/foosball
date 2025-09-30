@@ -18,12 +18,10 @@ public interface PlayerStatsRepository extends Repository<Player, Long> {
     List<PlayerStats> findAllPlayerStatsOrderedByWinPercentage();
 
     @Query(
-            value = "WITH total_games AS (SELECT COUNT(*) as game_count FROM foosball.games) "
-                    + "SELECT ps.id, ps.name, ps.total_games, ps.wins, ps.win_percentage, "
-                    + "ROUND((1000 + ((ps.wins * 25) - ((ps.total_games - ps.wins) * 10)) + (ps.total_games * 2)) "
-                    + "+ (ps.total_games * 100.0 / tg.game_count)) AS rank_score "
-                    + "FROM foosball.player_stats ps, total_games tg "
-                    + "WHERE ps.total_games >= 5 "
+            value = "SELECT id, name, total_games, wins, win_percentage, "
+                    + "(1000 + ((wins * 25) - ((total_games - wins) * 10)) + (total_games * 2)) AS rank_score "
+                    + "FROM foosball.player_stats "
+                    + "WHERE total_games >= 5 "
                     + "ORDER BY rank_score DESC",
             nativeQuery = true)
     List<PlayerStats> findAllPlayerStatsOrderedByRankScore();
