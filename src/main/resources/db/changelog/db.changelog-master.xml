@@ -9,4 +9,5 @@
     <include file="classpath:db/changelog/changes/001-initial-schema.xml" />
     <include file="classpath:db/changelog/changes/002-update-team-stats-view.xml" />
     <include file="classpath:db/changelog/changes/003-add-shedlock-table.xml" />
+    <include file="classpath:db/changelog/changes/004-tournament-schema.xml" />
 </databaseChangeLog>
