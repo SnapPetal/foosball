@@ -19,7 +19,8 @@ public interface PlayerStatsRepository extends Repository<Player, Long> {
 
     @Query(
             value = "SELECT id, name, total_games, wins, win_percentage, "
-                    + "(1000 + ((wins * 25) - ((total_games - wins) * 10)) + (total_games * 2)) AS rank_score "
+                    + "ROUND((1000 + ((wins * 25) - ((total_games - wins) * 10)) + (total_games * 2)) "
+                    + "* (total_games::decimal / (SELECT SUM(total_games) FROM foosball.player_stats WHERE total_games >= 5))) AS rank_score "
                     + "FROM foosball.player_stats "
                     + "WHERE total_games >= 5 "
                     + "ORDER BY rank_score DESC",
