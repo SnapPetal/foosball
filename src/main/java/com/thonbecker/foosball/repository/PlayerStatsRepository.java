@@ -2,10 +2,12 @@ package com.thonbecker.foosball.repository;
 
 import com.thonbecker.foosball.entity.Player;
 import com.thonbecker.foosball.projection.PlayerStats;
-import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface PlayerStatsRepository extends Repository<Player, Long> {
 
@@ -17,7 +19,7 @@ public interface PlayerStatsRepository extends Repository<Player, Long> {
 
     @Query(
             value = "SELECT id, name, total_games, wins, win_percentage, "
-                    + "(1000 + ((wins * 25) - ((total_games - wins) * 10))) AS rank_score "
+                    + "(1000 + ((wins * 25) - ((total_games - wins) * 10)) + (total_games * 2)) AS rank_score "
                     + "FROM foosball.player_stats "
                     + "WHERE total_games >= 5 "
                     + "ORDER BY rank_score DESC",

@@ -7,11 +7,13 @@ import com.thonbecker.foosball.model.GameRequest;
 import com.thonbecker.foosball.projection.PlayerStats;
 import com.thonbecker.foosball.projection.TeamStats;
 import com.thonbecker.foosball.service.FoosballService;
-import java.util.List;
-import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/foosball")
@@ -115,13 +117,15 @@ public class FoosballController {
     }
 
     @GetMapping("/stats/players/top-total-games")
-    public ResponseEntity<List<PlayerStats>> getTopPlayersByTotalGames(@RequestParam(defaultValue = "5") int minGames) {
+    public ResponseEntity<List<PlayerStats>> getTopPlayersByTotalGames(
+            @RequestParam(defaultValue = "5") int minGames) {
         List<PlayerStats> stats = foosballService.getTopPlayersByTotalGames(minGames);
         return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/stats/players/top-wins")
-    public ResponseEntity<List<PlayerStats>> getTopPlayersByWins(@RequestParam(defaultValue = "5") int minGames) {
+    public ResponseEntity<List<PlayerStats>> getTopPlayersByWins(
+            @RequestParam(defaultValue = "5") int minGames) {
         List<PlayerStats> stats = foosballService.getTopPlayersByWins(minGames);
         return ResponseEntity.ok(stats);
     }
@@ -134,13 +138,15 @@ public class FoosballController {
 
     // Team performance statistics
     @GetMapping("/stats/teams/top-win-percentage")
-    public ResponseEntity<List<TeamStats>> getTopTeamsByWinPercentage(@RequestParam(defaultValue = "5") int minGames) {
+    public ResponseEntity<List<TeamStats>> getTopTeamsByWinPercentage(
+            @RequestParam(defaultValue = "5") int minGames) {
         List<TeamStats> stats = foosballService.getTopTeamsByWinPercentage(minGames);
         return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/stats/teams/top-average-score")
-    public ResponseEntity<List<TeamStats>> getTopTeamsByAverageScore(@RequestParam(defaultValue = "5") int minGames) {
+    public ResponseEntity<List<TeamStats>> getTopTeamsByAverageScore(
+            @RequestParam(defaultValue = "5") int minGames) {
         List<TeamStats> stats = foosballService.getTopTeamsByAverageScore(minGames);
         return ResponseEntity.ok(stats);
     }

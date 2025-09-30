@@ -1,20 +1,29 @@
 package com.thonbecker.foosball.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+
+import lombok.*;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Setter
 @ToString(
-        exclude = {"whiteTeamPlayer1Games", "whiteTeamPlayer2Games", "blackTeamPlayer1Games", "blackTeamPlayer2Games"})
+        exclude = {
+            "whiteTeamPlayer1Games",
+            "whiteTeamPlayer2Games",
+            "blackTeamPlayer1Games",
+            "blackTeamPlayer2Games"
+        })
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @Entity

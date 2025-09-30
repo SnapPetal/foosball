@@ -2,10 +2,12 @@ package com.thonbecker.foosball.repository;
 
 import com.thonbecker.foosball.entity.Player;
 import com.thonbecker.foosball.projection.TeamStats;
-import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface TeamStatsRepository extends Repository<Player, Long> {
 

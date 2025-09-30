@@ -1,12 +1,16 @@
 package com.thonbecker.foosball.service;
 
 import com.thonbecker.foosball.repository.GameRepository;
-import java.time.LocalDate;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor

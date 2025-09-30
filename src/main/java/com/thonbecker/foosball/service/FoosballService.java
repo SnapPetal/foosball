@@ -8,12 +8,14 @@ import com.thonbecker.foosball.repository.GameRepository;
 import com.thonbecker.foosball.repository.PlayerRepository;
 import com.thonbecker.foosball.repository.PlayerStatsRepository;
 import com.thonbecker.foosball.repository.TeamStatsRepository;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -63,7 +65,8 @@ public class FoosballService {
             Player blackTeamPlayer2,
             int whiteTeamScore,
             int blackTeamScore) {
-        Game game = new Game(whiteTeamPlayer1, whiteTeamPlayer2, blackTeamPlayer1, blackTeamPlayer2);
+        Game game =
+                new Game(whiteTeamPlayer1, whiteTeamPlayer2, blackTeamPlayer1, blackTeamPlayer2);
         game.setScores(whiteTeamScore, blackTeamScore);
         return gameRepository.save(game);
     }
