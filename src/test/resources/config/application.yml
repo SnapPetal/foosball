@@ -1,29 +1,14 @@
-# Test Profile Configuration
-# Use H2 in-memory database for testing
-
-# Database Configuration
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password: ""
-    driver-class-name: org.h2.Driver
-  
-  # JPA Configuration
+  docker:
+    compose:
+      enabled: false
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     show-sql: false
     properties:
       hibernate:
         format_sql: false
-        dialect: org.hibernate.dialect.H2Dialect
-  
-  # Disable Liquibase for tests
   liquibase:
-    enabled: false
+    enabled: true
 
-# Disable sample data loading
-foosball:
-  sample-data:
-    enabled: false
