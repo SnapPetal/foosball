@@ -22,8 +22,9 @@ public class CleanupService {
     @SchedulerLock(name = "cleanupOldGames", lockAtLeastFor = "PT5M", lockAtMostFor = "PT1H")
     public void cleanupOldGames() {
         log.info("Starting cleanup of old games.");
-        LocalDate ninetyDaysAgo = LocalDate.now().minusDays(90);
-        int deletedGamesCount = gameRepository.deleteGamesOlderThan(ninetyDaysAgo.atStartOfDay());
+        final var ninetyDaysAgo = LocalDate.now().minusDays(90);
+        final var deletedGamesCount =
+                gameRepository.deleteGamesOlderThan(ninetyDaysAgo.atStartOfDay());
         log.info("Finished cleanup of old games. Deleted {} games.", deletedGamesCount);
     }
 }

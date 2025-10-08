@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="FoosballApplication" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="FoosballApplication" type="Application" factoryName="Application" activateToolWindowBeforeRun="false" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="com.thonbecker.foosball.FoosballApplication" />
     <module name="foosball" />
-    <option name="PROGRAM_PARAMETERS" value="Dspring-boot.run.arguments=&quot;--spring.profiles.active=dev&quot;" />
+    <option name="PROGRAM_PARAMETERS" value="--spring.profiles.active=dev" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.thonbecker.foosball.*" />

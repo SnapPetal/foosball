@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 @Profile("dev")
 public class DataLoader {
@@ -31,7 +29,7 @@ public class DataLoader {
      */
     private Player getOrCreatePlayer(String name, String email) {
         // First try to find existing player
-        Optional<Player> existingPlayer = foosballService.findPlayerByName(name);
+        final var existingPlayer = foosballService.findPlayerByName(name);
         if (existingPlayer.isPresent()) {
             System.out.println("Player " + name + " already exists, using existing player.");
             return existingPlayer.get();
@@ -51,18 +49,18 @@ public class DataLoader {
         System.out.println("Loading sample foosball data...");
 
         // Create sample players - expanded roster
-        Player alice = getOrCreatePlayer("Alice", "alice@example.com");
-        Player bob = getOrCreatePlayer("Bob", "bob@example.com");
-        Player charlie = getOrCreatePlayer("Charlie", "charlie@example.com");
-        Player diana = getOrCreatePlayer("Diana", "diana@example.com");
-        Player eve = getOrCreatePlayer("Eve", "eve@example.com");
-        Player frank = getOrCreatePlayer("Frank", "frank@example.com");
-        Player grace = getOrCreatePlayer("Grace", "grace@example.com");
-        Player henry = getOrCreatePlayer("Henry", "henry@example.com");
-        Player iris = getOrCreatePlayer("Iris", "iris@example.com");
-        Player jack = getOrCreatePlayer("Jack", "jack@example.com");
-        Player kate = getOrCreatePlayer("Kate", "kate@example.com");
-        Player liam = getOrCreatePlayer("Liam", "liam@example.com");
+        final var alice = getOrCreatePlayer("Alice", "alice@example.com");
+        final var bob = getOrCreatePlayer("Bob", "bob@example.com");
+        final var charlie = getOrCreatePlayer("Charlie", "charlie@example.com");
+        final var diana = getOrCreatePlayer("Diana", "diana@example.com");
+        final var eve = getOrCreatePlayer("Eve", "eve@example.com");
+        final var frank = getOrCreatePlayer("Frank", "frank@example.com");
+        final var grace = getOrCreatePlayer("Grace", "grace@example.com");
+        final var henry = getOrCreatePlayer("Henry", "henry@example.com");
+        final var iris = getOrCreatePlayer("Iris", "iris@example.com");
+        final var jack = getOrCreatePlayer("Jack", "jack@example.com");
+        final var kate = getOrCreatePlayer("Kate", "kate@example.com");
+        final var liam = getOrCreatePlayer("Liam", "liam@example.com");
 
         System.out.println("Created " + foosballService.getTotalPlayers() + " players");
 

@@ -2,6 +2,7 @@ package com.thonbecker.foosball.service;
 
 import com.thonbecker.foosball.entity.Game;
 import com.thonbecker.foosball.entity.Player;
+import com.thonbecker.foosball.projection.GameWithPlayers;
 import com.thonbecker.foosball.projection.PlayerStats;
 import com.thonbecker.foosball.projection.TeamStats;
 import com.thonbecker.foosball.repository.GameRepository;
@@ -40,12 +41,12 @@ public class FoosballService {
 
     // Player management
     public Player createPlayer(String name, String email) {
-        Player player = new Player(name, email);
+        final var player = new Player(name, email);
         return playerRepository.save(player);
     }
 
     public Player createPlayer(String name) {
-        Player player = new Player(name);
+        final var player = new Player(name);
         return playerRepository.save(player);
     }
 
@@ -65,14 +66,14 @@ public class FoosballService {
             Player blackTeamPlayer2,
             int whiteTeamScore,
             int blackTeamScore) {
-        Game game =
+        final var game =
                 new Game(whiteTeamPlayer1, whiteTeamPlayer2, blackTeamPlayer1, blackTeamPlayer2);
         game.setScores(whiteTeamScore, blackTeamScore);
         return gameRepository.save(game);
     }
 
     public List<Game> getAllGames() {
-        List<Game> games = new ArrayList<>();
+        final var games = new ArrayList<Game>();
         gameRepository.findAll().forEach(games::add);
         return games;
     }
@@ -85,7 +86,7 @@ public class FoosballService {
         return gameRepository.findByPlayer(player);
     }
 
-    public List<Game> getRecentGames() {
+    public List<GameWithPlayers> getRecentGames() {
         return gameRepository.findRecentGames();
     }
 

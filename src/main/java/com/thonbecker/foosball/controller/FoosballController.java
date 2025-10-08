@@ -4,6 +4,7 @@ import com.thonbecker.foosball.entity.Game;
 import com.thonbecker.foosball.entity.Player;
 import com.thonbecker.foosball.model.CreatePlayerRequest;
 import com.thonbecker.foosball.model.GameRequest;
+import com.thonbecker.foosball.projection.GameWithPlayers;
 import com.thonbecker.foosball.projection.PlayerStats;
 import com.thonbecker.foosball.projection.TeamStats;
 import com.thonbecker.foosball.service.FoosballService;
@@ -32,13 +33,13 @@ public class FoosballController {
     // Player endpoints
     @PostMapping("/players")
     public ResponseEntity<Player> createPlayer(@RequestBody CreatePlayerRequest request) {
-        Player player = foosballService.createPlayer(request.name(), request.email());
+        final var player = foosballService.createPlayer(request.name(), request.email());
         return ResponseEntity.ok(player);
     }
 
     @GetMapping("/players")
     public ResponseEntity<List<Player>> getAllPlayers() {
-        List<Player> players = foosballService.getAllPlayers();
+        final var players = foosballService.getAllPlayers();
         return ResponseEntity.ok(players);
     }
 
@@ -53,7 +54,7 @@ public class FoosballController {
 
     @GetMapping("/players/search")
     public ResponseEntity<List<Player>> searchPlayers(@RequestParam String name) {
-        List<Player> players = foosballService.getAllPlayers().stream()
+        final var players = foosballService.getAllPlayers().stream()
                 .filter(p -> p.getName().toLowerCase().contains(name.toLowerCase()))
                 .toList();
         return ResponseEntity.ok(players);
@@ -62,13 +63,13 @@ public class FoosballController {
     // Game endpoints
     @PostMapping("/games")
     public ResponseEntity<Game> recordGame(@RequestBody GameRequest request) {
-        Player whiteTeamPlayer1 =
+        final var whiteTeamPlayer1 =
                 foosballService.findPlayerByName(request.whiteTeamPlayer1()).orElse(null);
-        Player whiteTeamPlayer2 =
+        final var whiteTeamPlayer2 =
                 foosballService.findPlayerByName(request.whiteTeamPlayer2()).orElse(null);
-        Player blackTeamPlayer1 =
+        final var blackTeamPlayer1 =
                 foosballService.findPlayerByName(request.blackTeamPlayer1()).orElse(null);
-        Player blackTeamPlayer2 =
+        final var blackTeamPlayer2 =
                 foosballService.findPlayerByName(request.blackTeamPlayer2()).orElse(null);
 
         if (whiteTeamPlayer1 == null
@@ -78,7 +79,7 @@ public class FoosballController {
             return ResponseEntity.badRequest().build();
         }
 
-        Game game = foosballService.recordGame(
+        final var game = foosballService.recordGame(
                 whiteTeamPlayer1,
                 whiteTeamPlayer2,
                 blackTeamPlayer1,
@@ -90,7 +91,7 @@ public class FoosballController {
 
     @GetMapping("/games")
     public ResponseEntity<List<Game>> getAllGames() {
-        List<Game> games = foosballService.getAllGames();
+        final var games = foosballService.getAllGames();
         return ResponseEntity.ok(games);
     }
 
@@ -103,8 +104,8 @@ public class FoosballController {
     }
 
     @GetMapping("/games/recent")
-    public ResponseEntity<List<Game>> getRecentGames() {
-        List<Game> games = foosballService.getRecentGames();
+    public ResponseEntity<List<GameWithPlayers>> getRecentGames() {
+        final var games = foosballService.getRecentGames();
         return ResponseEntity.ok(games);
     }
 
@@ -112,27 +113,27 @@ public class FoosballController {
     @GetMapping("/stats/players/top-win-percentage")
     public ResponseEntity<List<PlayerStats>> getTopPlayersByWinPercentage(
             @RequestParam(defaultValue = "5") int minGames) {
-        List<PlayerStats> stats = foosballService.getTopPlayersByWinPercentage(minGames);
+        final var stats = foosballService.getTopPlayersByWinPercentage(minGames);
         return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/stats/players/top-total-games")
     public ResponseEntity<List<PlayerStats>> getTopPlayersByTotalGames(
             @RequestParam(defaultValue = "5") int minGames) {
-        List<PlayerStats> stats = foosballService.getTopPlayersByTotalGames(minGames);
+        final var stats = foosballService.getTopPlayersByTotalGames(minGames);
         return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/stats/players/top-wins")
     public ResponseEntity<List<PlayerStats>> getTopPlayersByWins(
             @RequestParam(defaultValue = "5") int minGames) {
-        List<PlayerStats> stats = foosballService.getTopPlayersByWins(minGames);
+        final var stats = foosballService.getTopPlayersByWins(minGames);
         return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/stats/players/all")
     public ResponseEntity<List<PlayerStats>> getAllPlayerStats() {
-        List<PlayerStats> stats = foosballService.getAllPlayerStatsOrderedByRankScore();
+        final var stats = foosballService.getAllPlayerStatsOrderedByRankScore();
         return ResponseEntity.ok(stats);
     }
 
@@ -140,20 +141,20 @@ public class FoosballController {
     @GetMapping("/stats/teams/top-win-percentage")
     public ResponseEntity<List<TeamStats>> getTopTeamsByWinPercentage(
             @RequestParam(defaultValue = "5") int minGames) {
-        List<TeamStats> stats = foosballService.getTopTeamsByWinPercentage(minGames);
+        final var stats = foosballService.getTopTeamsByWinPercentage(minGames);
         return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/stats/teams/top-average-score")
     public ResponseEntity<List<TeamStats>> getTopTeamsByAverageScore(
             @RequestParam(defaultValue = "5") int minGames) {
-        List<TeamStats> stats = foosballService.getTopTeamsByAverageScore(minGames);
+        final var stats = foosballService.getTopTeamsByAverageScore(minGames);
         return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/stats/teams/all")
     public ResponseEntity<List<TeamStats>> getAllTeamStats() {
-        List<TeamStats> stats = foosballService.getAllTeamStatsOrderedByWinPercentage();
+        final var stats = foosballService.getAllTeamStatsOrderedByWinPercentage();
         return ResponseEntity.ok(stats);
     }
 

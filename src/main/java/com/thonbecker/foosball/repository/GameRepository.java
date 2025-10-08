@@ -2,6 +2,7 @@ package com.thonbecker.foosball.repository;
 
 import com.thonbecker.foosball.entity.Game;
 import com.thonbecker.foosball.entity.Player;
+import com.thonbecker.foosball.projection.GameWithPlayers;
 
 import jakarta.transaction.Transactional;
 
@@ -34,8 +35,12 @@ public interface GameRepository extends CrudRepository<Game, Long> {
             @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
     @RestResource(path = "recent", rel = "recent")
-    @Query("SELECT g FROM Game g ORDER BY g.playedAt DESC")
-    List<Game> findRecentGames();
+    @Query("SELECT g FROM Game g " + "LEFT JOIN FETCH g.whiteTeamPlayer1 "
+            + "LEFT JOIN FETCH g.whiteTeamPlayer2 "
+            + "LEFT JOIN FETCH g.blackTeamPlayer1 "
+            + "LEFT JOIN FETCH g.blackTeamPlayer2 "
+            + "ORDER BY g.playedAt DESC LIMIT 10")
+    List<GameWithPlayers> findRecentGames();
 
     @RestResource(path = "by-score", rel = "by-score")
     @Query(
