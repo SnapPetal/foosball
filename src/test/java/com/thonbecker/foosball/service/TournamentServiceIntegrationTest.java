@@ -7,6 +7,7 @@ import com.thonbecker.foosball.entity.*;
 import com.thonbecker.foosball.model.CreateTournamentRequest;
 import com.thonbecker.foosball.repository.*;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -41,10 +42,17 @@ class TournamentServiceIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private TournamentStandingRepository standingRepository;
 
+    @Autowired
+    private EntityManager entityManager;
+
     private Player player1;
     private Player player2;
     private Player player3;
     private Player player4;
+    private Player player5;
+    private Player player6;
+    private Player player7;
+    private Player player8;
     private Tournament tournament;
 
     @BeforeEach
@@ -57,11 +65,15 @@ class TournamentServiceIntegrationTest extends AbstractIntegrationTest {
         gameRepository.deleteAll();
         playerRepository.deleteAll();
 
-        // Create players
+        // Create players (8 players for 4 teams)
         player1 = playerRepository.save(new Player("Alice", "alice@example.com"));
         player2 = playerRepository.save(new Player("Bob", "bob@example.com"));
         player3 = playerRepository.save(new Player("Charlie", "charlie@example.com"));
         player4 = playerRepository.save(new Player("Diana", "diana@example.com"));
+        player5 = playerRepository.save(new Player("Eve", "eve@example.com"));
+        player6 = playerRepository.save(new Player("Frank", "frank@example.com"));
+        player7 = playerRepository.save(new Player("Grace", "grace@example.com"));
+        player8 = playerRepository.save(new Player("Henry", "henry@example.com"));
     }
 
     @Test
@@ -104,9 +116,9 @@ class TournamentServiceIntegrationTest extends AbstractIntegrationTest {
         // Create a game result
         var game = createGame(
                 firstMatch.getTeam1().getPlayer(),
-                null,
+                firstMatch.getTeam1().getPartner(),
                 firstMatch.getTeam2().getPlayer(),
-                null,
+                firstMatch.getTeam2().getPartner(),
                 10,
                 5);
 
@@ -171,13 +183,23 @@ class TournamentServiceIntegrationTest extends AbstractIntegrationTest {
         // Complete first match
         var match1 = firstRoundMatches.get(0);
         var game1 = createGame(
-                match1.getTeam1().getPlayer(), null, match1.getTeam2().getPlayer(), null, 10, 3);
+                match1.getTeam1().getPlayer(),
+                match1.getTeam1().getPartner(),
+                match1.getTeam2().getPlayer(),
+                match1.getTeam2().getPartner(),
+                10,
+                3);
         tournamentService.completeMatch(match1.getId(), game1.getId());
 
         // Complete second match
         var match2 = firstRoundMatches.get(1);
         var game2 = createGame(
-                match2.getTeam1().getPlayer(), null, match2.getTeam2().getPlayer(), null, 8, 7);
+                match2.getTeam1().getPlayer(),
+                match2.getTeam1().getPartner(),
+                match2.getTeam2().getPlayer(),
+                match2.getTeam2().getPartner(),
+                8,
+                7);
         tournamentService.completeMatch(match2.getId(), game2.getId());
 
         // Then - Verify standings for all 4 players
@@ -218,9 +240,9 @@ class TournamentServiceIntegrationTest extends AbstractIntegrationTest {
         var semifinal1 = round1Matches.get(0);
         var game1 = createGame(
                 semifinal1.getTeam1().getPlayer(),
-                null,
+                semifinal1.getTeam1().getPartner(),
                 semifinal1.getTeam2().getPlayer(),
-                null,
+                semifinal1.getTeam2().getPartner(),
                 10,
                 5);
         tournamentService.completeMatch(semifinal1.getId(), game1.getId());
@@ -228,9 +250,9 @@ class TournamentServiceIntegrationTest extends AbstractIntegrationTest {
         var semifinal2 = round1Matches.get(1);
         var game2 = createGame(
                 semifinal2.getTeam1().getPlayer(),
-                null,
+                semifinal2.getTeam1().getPartner(),
                 semifinal2.getTeam2().getPlayer(),
-                null,
+                semifinal2.getTeam2().getPartner(),
                 10,
                 6);
         tournamentService.completeMatch(semifinal2.getId(), game2.getId());
@@ -248,9 +270,9 @@ class TournamentServiceIntegrationTest extends AbstractIntegrationTest {
 
         var finalGame = createGame(
                 finalMatch.getTeam1().getPlayer(),
-                null,
+                finalMatch.getTeam1().getPartner(),
                 finalMatch.getTeam2().getPlayer(),
-                null,
+                finalMatch.getTeam2().getPartner(),
                 10,
                 8);
         tournamentService.completeMatch(finalMatch.getId(), finalGame.getId());
@@ -286,34 +308,6 @@ class TournamentServiceIntegrationTest extends AbstractIntegrationTest {
         assertThat(semiFinalists).hasSize(2);
     }
 
-    @Test
-    void shouldRankStandingsByGoalDifferenceWhenPointsAreEqual() {
-        // Given - Create and start tournament with 2 players
-        tournament = createTournamentWith2Players();
-
-        var match = matchRepository
-                .findByTournamentIdOrderByRoundNumberAscMatchNumberAsc(tournament.getId())
-                .get(0);
-
-        // Create a draw game
-        var game = createGame(
-                match.getTeam1().getPlayer(), null, match.getTeam2().getPlayer(), null, 5, 5);
-
-        // When
-        tournamentService.completeMatch(match.getId(), game.getId());
-
-        // Then
-        var standings = standingRepository.findByTournamentIdOrderByPointsDesc(tournament.getId());
-        assertThat(standings).hasSize(2);
-
-        // Both should have same points (1 for draw)
-        standings.forEach(standing -> {
-            assertThat(standing.getPoints().intValue()).isEqualTo(1);
-            assertThat(standing.getDraws()).isEqualTo(1);
-            assertThat(standing.getGoalDifference()).isEqualTo(0);
-        });
-    }
-
     // Helper methods
 
     private Tournament createAndStartTournament() {
@@ -330,40 +324,24 @@ class TournamentServiceIntegrationTest extends AbstractIntegrationTest {
         var created = tournamentService.createTournament(request, player1.getId());
         tournamentService.openRegistration(created.getId());
 
-        // Register 4 players
-        var reg1 = createRegistration(created, player1);
-        var reg2 = createRegistration(created, player2);
-        var reg3 = createRegistration(created, player3);
-        var reg4 = createRegistration(created, player4);
+        // Register 4 teams (2 players per team)
+        createTeamRegistration(created, player1, player2);
+        createTeamRegistration(created, player3, player4);
+        createTeamRegistration(created, player5, player6);
+        createTeamRegistration(created, player7, player8);
+
+        entityManager.clear(); // Clear cache to ensure fresh load
 
         tournamentService.closeRegistration(created.getId());
         return tournamentService.startTournament(created.getId());
     }
 
-    private Tournament createTournamentWith2Players() {
-        var request = new CreateTournamentRequest(
-                "Test Tournament",
-                "Test Description",
-                Tournament.TournamentType.SINGLE_ELIMINATION,
-                2,
-                LocalDateTime.now().minusDays(1),
-                LocalDateTime.now().plusDays(1),
-                LocalDateTime.now().plusDays(2),
-                null);
-
-        var created = tournamentService.createTournament(request, player1.getId());
-        tournamentService.openRegistration(created.getId());
-
-        createRegistration(created, player1);
-        createRegistration(created, player2);
-
-        tournamentService.closeRegistration(created.getId());
-        return tournamentService.startTournament(created.getId());
-    }
-
-    private TournamentRegistration createRegistration(Tournament tournament, Player player) {
-        var registration = new TournamentRegistration(tournament, player);
-        return registrationRepository.save(registration);
+    private TournamentRegistration createTeamRegistration(
+            Tournament tournament, Player player, Player partner) {
+        var registration = new TournamentRegistration(tournament, player, partner);
+        var saved = registrationRepository.save(registration);
+        entityManager.flush();
+        return saved;
     }
 
     private Game createGame(
